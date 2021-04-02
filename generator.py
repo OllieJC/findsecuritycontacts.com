@@ -80,7 +80,10 @@ if __name__ == "__main__":
 
     domains_list = ats.getSites(500)
 
-    print(f"Got domain list, count: {len(domains_list)}")
+    if len(domains_list) > 0:
+        print(f"Got domain list, count: {len(domains_list)}")
+    else:
+        raise Exception("No domains")
 
     results = []
 
