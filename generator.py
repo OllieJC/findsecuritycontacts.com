@@ -86,7 +86,7 @@ if __name__ == "__main__":
     f.close()
 
     if domains_raw:
-        domains_list = [f"{k+1}:{v}" for k, v in enumerate(domains_raw[:30])]
+        domains_list = [f"{k+1}:{v}" for k, v in enumerate(domains_raw)]
 
         results = []
 
