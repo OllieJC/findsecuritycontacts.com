@@ -13,7 +13,10 @@ well_known: str = "dist/.well-known"
 
 
 def setupDist():
-    shutil.rmtree(dist)
+    try:
+        shutil.rmtree(dist)
+    except Exception as e:
+        print(e)
 
     os.mkdir(dist)
     os.mkdir(top_sites)
