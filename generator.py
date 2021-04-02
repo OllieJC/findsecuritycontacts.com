@@ -4,6 +4,7 @@ from multiprocessing import Pool
 import shutil
 import json
 import os
+import ats
 import re
 
 
@@ -77,17 +78,13 @@ def genStaticFiles(results: list):
 if __name__ == "__main__":
     setupDist()
 
-    domains_raw = []
-    f = open("assets/top500Domains.txt")
-    domains_raw = f.read().strip().split("\n")
-    f.close()
+    domains_list = ats.getSites(500)
 
-    if domains_raw:
-        domains_list = [f"{k+1}:{v}" for k, v in enumerate(domains_raw)]
+    print(f"Got domain list, count: {len(domains_list)}")
 
-        results = []
+    results = []
 
-        with Pool(int(os.environ.get("POOL_SIZE", "15"))) as p:
-            results = p.map(genSecurityTxtForDomain, domains_list)
+    with Pool(int(os.environ.get("POOL_SIZE", "15"))) as p:
+        results = p.map(genSecurityTxtForDomain, domains_list)
 
-        genStaticFiles(results)
+    genStaticFiles(results)

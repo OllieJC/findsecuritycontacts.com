@@ -25,6 +25,8 @@ jobs:
           architecture: 'x64'
 
       - name: Build static site
+        env:
+          ATS_KEY: ${{ secrets.ATS_KEY }}
         run: |
           python -m pip install -r requirements.txt
           python generator.py

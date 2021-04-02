@@ -36,12 +36,12 @@ def makeLink(v: str) -> str:
 
     try:
         if v.startswith("mailto:"):
-            v_re = re.search("^mailto:(?P<val>.+?)(?:\<|$)", v)
+            v_re = re.search(r"^mailto:(?P<val>.+?)(?:\<|$)", v)
             actual = v_re.group("val")
             res = f'<a href="mailto:{actual}">{actual}</a>'
 
         if v.startswith("https://"):
-            v_re = re.search("^(?P<val>https:\/\/.+?)(?:\<|$)", v)
+            v_re = re.search(r"^(?P<val>https:\/\/.+?)(?:\<|$)", v)
             actual = v_re.group("val")
             res = f'<a href="{actual}">{actual}</a>'
 
