@@ -63,7 +63,7 @@ def getOrSetAssetSRI(filename: str) -> str:
 
 def renderTemplate(filename: str, params: dict = {}, domain: str = "") -> str:
     params.update({"filename": filename})
-    params.update({"updated_at": time.strftime("%H:%M%z on %d %B %Y")})
+    params.update({"updated_at": time.strftime("%H:%M:%S%z on %d %B %Y")})
 
     if domain:
         params.update({"domain": domain})
