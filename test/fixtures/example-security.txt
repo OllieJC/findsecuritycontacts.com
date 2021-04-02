@@ -1,0 +1,24 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+# Canonical URI
+Canonical: https://example.com/.well-known/security.txt
+
+# Our security address
+Contact: mailto:security@example.com
+
+# Our OpenPGP key
+Encryption: https://example.com/pgp-key.txt
+
+# Our security policy
+Policy: https://example.com/security-policy.html
+
+# Our security acknowledgments page
+Acknowledgments: https://example.com/hall-of-fame.html
+
+Expires: Thu, 31 Dec 2030 18:37:07 -0800
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2.2
+
+[signature]
+-----END PGP SIGNATURE-----

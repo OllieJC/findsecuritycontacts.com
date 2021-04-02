@@ -1,0 +1,130 @@
+
+
+/* Custom page CSS
+-------------------------------------------------- */
+/* Not required for template or sticky footer method. */
+
+main > .container {
+  padding: 2em 0;
+  margin-bottom: 6em;
+}
+
+.footer {
+  border-top: 0.25em solid #bbb;
+  background-color: #f5f5f5;
+}
+
+.footer > .container {
+  padding-right: 15px;
+  padding-left: 15px;
+  text-align: center;
+}
+
+code {
+  font-size: 80%;
+}
+
+.bd-placeholder-img {
+  font-size: 1.125rem;
+  text-anchor: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+pre {
+  border-left: 0.5em solid #c8c8c8;
+  padding-left: 2em;
+}
+
+@media (min-width: 768px) {
+  .bd-placeholder-img-lg {
+    font-size: 3.5rem;
+  }
+}
+
+a:focus {
+  text-decoration: none;
+  background-color: #fd0;
+  box-shadow: 0 -2px #fd0,0 4px #0b0c0c;
+}
+
+
+a,
+a:link,
+a:visited,
+a:hover,
+a:active,
+a:focus {
+  color: black;
+}
+a:hover {
+  text-decoration: none;
+}
+
+.back:link,
+.back:visited,
+.back:hover,
+.back:active,
+.back:focus {
+    color: #0b0c0c;
+}
+
+.back {
+  margin: 1em 0;
+  display: inline-block;
+  position: relative;
+  padding-left: 14px;
+}
+
+.back[href] {
+  text-decoration: underline;
+}
+
+.back::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 3px;
+  width: 7px;
+  height: 7px;
+  margin: auto 0;
+  -webkit-transform: rotate(225deg);
+  -ms-transform: rotate(225deg);
+  transform: rotate(225deg);
+  border: solid;
+  border-width: 2px 2px 0 0;
+  border-color: #505a5f;
+}
+
+.btn-cgrp .btn {
+  cursor: inherit;
+}
+
+.btn-cgrp {
+  width: 100%;
+  position: relative;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  vertical-align: middle;
+  padding: 2em 0;
+}
+
+.btn-cgrp .btn { border-radius: 0; width:100% }
+.btn-cgrp .btn:first-child {border-radius: 14px 0 0 14px}
+.btn-cgrp .btn:last-child {border-radius: 0 14px 14px 0}
+
+@media (max-width: 992px) {
+  .btn-cgrp { display: inline-table !important }
+  .btn-cgrp .btn:first-child {border-radius: 14px 14px 0 0}
+  .btn-cgrp .btn:last-child {border-radius: 0 0 14px 14px}
+  .hide_medium { display: none; }
+}
+
+@media (max-width: 576px) {
+  .btn-cgrp{margin-left: -15px;width:calc(100% + 15px) !important}
+  .btn-cgrp .btn{border-radius: 0 !important}
+  .hide_small { display: none; }
+}

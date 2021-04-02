@@ -1,0 +1,67 @@
+{% extends "_primary.html" %}
+{% block content %}
+<div>
+  <div>
+    <div class="btn-cgrp" role="group">
+      <span class="btn alert-info">Top {{ total }}</span>
+      <span class="btn alert-success">{{ has_contacts }} OK</span>
+      <span class="btn alert-danger">{{ no_contacts }} bad</span>
+		</div>
+  </div>
+
+  <table class="table table-striped" cellspacing="0" width="100%">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Domain</th>
+        <th class="hide_medium">Status</th>
+        <th class="hide_small">Looks valid</th>
+        <th class="hide_medium">Scheme</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for n in results|sort(attribute='top_index') %}
+        {% if n["domain"] -%}
+          <tr>
+            <td>{{ n["top_index"] }}</td>
+
+            {% if n["has_contact"] -%}
+              <td><a href="/top/{{ n['domain'] }}">{{ n["domain"] }} (view details)</a></td>
+            {% else -%}
+              <td>{{ n["domain"] }}</td>
+            {% endif -%}
+
+            <td class="hide_medium">{{ n["status_code"] }}</td>
+
+            {% if n["has_contact"] -%}
+
+              <td class="hide_small">{{ pb(n["has_contact"]) }} <i class="fas fa-check"></i></td>
+
+              {% if n["sectxt_type"] == 3 or n["sectxt_type"] == 4 -%}
+                <td class="hide_medium">http <i class="fas fa-lock-open"></i></td>
+              {% elif n["sectxt_type"] == 1 or n["sectxt_type"] == 2 -%}
+                <td class="hide_medium">https <i class="fas fa-lock"></i></td>
+              {% endif -%}
+
+            {% else -%}
+
+              <td class="hide_small">{{ pb(n["has_contact"]) }} <i class="fas fa-times"></td>
+              <td class="hide_medium">&nbsp;</td>
+
+            {% endif -%}
+          </tr>
+        {% endif -%}
+      {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr>
+        <th>#</th>
+        <th>Domain</th>
+        <th class="hide_medium">Status</th>
+        <th class="hide_small">Looks valid</th>
+        <th class="hide_medium">Scheme</th>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+{% endblock %}

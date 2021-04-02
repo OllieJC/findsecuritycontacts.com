@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en" class="h-100">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="OllieJC">
+    <meta name="generator" content="https://github.com/OllieJC/gotsecuritytxt.com">
+    <title>gotsecuritytxt.com</title>
+    <link rel="canonical" href="https://gotsecuritytxt.com">
+    <link rel="stylesheet" crossorigin="anonymous" href="/assets/css/bootstrap.min.css" integrity="{{ bootstrap_min_css_hash }}">
+    <link rel="stylesheet" crossorigin="anonymous" href="/assets/css/all.css" integrity="{{ font_awesome_css_hash }}">
+    <link rel="stylesheet" crossorigin="anonymous" href="/assets/css/bootstrap-table.min.css" integrity="{{ bs_table_css_hash }}">
+    <meta name="theme-color" content="#7952b3">
+    <link href="/assets/css/_main.css" rel="stylesheet" integrity="{{ main_css_hash }}" crossorigin="anonymous">
+  </head>
+  <body class="d-flex flex-column h-100">
+
+{% if false -%}
+<header>
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">gotsecuritytxt.com</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav me-auto mb-2 mb-md-0">
+          <li class="nav-item">
+            <a class="nav-link {{ 'active' if filename == 'index.html' else '' }}" aria-current="page" href="https://gotsecuritytxt.com">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {{ 'active' if filename == 'query.html' else '' }}" href="https://gotsecuritytxt.com/query">Query</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
+{% endif -%}
+
+<!-- Begin page content -->
+<main role="main" class="flex-shrink-0">
+  <div class="container">
+    <h1>gotsecuritytxt.com</h1>
+    {% block content %}{% endblock %}
+  </div>
+</main>
+
+<footer class="footer mt-auto py-3 bg-light fixed-bottom">
+  <div class="container">
+    Hosted on <a target="_blank" rel="noopener noreferrer" href="https://aws.amazon.com/">AWS</a>,
+    uses <a target="_blank" rel="noopener noreferrer" href="https://getbootstrap.com/">Bootstrap</a>,
+    is open source <a target="_blank" rel="noopener noreferrer" href="https://github.com/OllieJC/gotsecuritytxt.com">OllieJC/gotsecuritytxt.com</a>
+  <br />
+    <a target="_blank" rel="noopener noreferrer" href="https://github.com/OllieJC/"><i class="fab fa-github"></i></a>&nbsp;
+    <a target="_blank" rel="noopener noreferrer" href="https://github.com/OllieJC/">OllieJC</a>
+    &nbsp;&nbsp;/&nbsp;&nbsp;
+    <a target="_blank" rel="noopener noreferrer" href="https://twitter.com/0llieJC"><i class="fab fa-twitter"></i></a>&nbsp;
+    <a target="_blank" rel="noopener noreferrer" href="https://twitter.com/0llieJC">0llieJC</a>
+  </div>
+</footer>
+
+
+    <script src="/assets/js/jquery.min.js" integrity="{{ jq_js_hash }}" crossorigin="anonymous"></script>
+    <script src="/assets/js/bootstrap.bundle.min.js" integrity="{{ bsb_js_hash }}" crossorigin="anonymous"></script>
+    <script src="/assets/js/bootstrap-table.min.js" integrity="{{ bs_table_js_hash }}" crossorigin="anonymous"></script>
+    <script src="/assets/js/_main.js" integrity="{{ main_js_hash }}" crossorigin="anonymous"></script>
+
+
+  </body>
+</html>

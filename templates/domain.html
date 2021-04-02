@@ -1,0 +1,37 @@
+{% extends "_primary.html" %}
+{% block content %}
+  <a href="#" onclick="history.back();" class="back">Back</a>
+  <h2>{{ res["domain"] }}</h2>
+  <p>URL: {{ makeLink(res["url"])|safe }}</p>
+  <p>Status: {{ res["status_code"] }}</p>
+  <p>Has a contact: {{ pb(res["has_contact"]) }}</p>
+
+  {% if res["has_contact"] -%}
+    <div>
+      <p>Contacts:</p>
+      <ul>
+        {% for x in res["items"]["Contact"] %}
+          <li>{{ makeLink(x)|safe }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    {% if res["items"]["Policy"]|length > 0 -%}
+      <div>
+        <p>Policy:</p>
+        <ul>
+          {% for x in res["items"]["Policy"] %}
+            <li>{{ makeLink(x)|safe }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif -%}
+
+    <p>Minimal version: <pre>{{ res["min_text"] }}</pre></p>
+  {% endif -%}
+
+  {% if res["full_text"] -%}
+    <p>Full version: <pre>{{ res["full_text"] }}</pre></p>
+  {% endif -%}
+
+{% endblock %}
