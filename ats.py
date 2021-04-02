@@ -24,7 +24,7 @@ def parse(content: dict) -> list:
     return ranking
 
 
-def getSites(count=100, cc="US"):
+def getSites(count=100, cc="US") -> list:
 
     canonical_uri = "/api"
     canonical_querystring = "Action=Topsites&Output=json"
@@ -46,4 +46,5 @@ def getSites(count=100, cc="US"):
     if r.status_code == 200:
         return parse(r.json())
     else:
-        return {}
+        print(r.text)
+        return []
