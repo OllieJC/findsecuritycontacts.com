@@ -78,7 +78,7 @@ def genStaticFiles(results: list):
 if __name__ == "__main__":
     setupDist()
 
-    domains_list = ats.getSites(250)
+    domains_list = ats.getSites(1000)
 
     if len(domains_list) > 0:
         print(f"Got domain list, count: {len(domains_list)}")
