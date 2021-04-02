@@ -5,7 +5,7 @@
 /* Not required for template or sticky footer method. */
 
 main > .container {
-  padding: 2em 0;
+  padding: 2em 1.5em;
   margin-bottom: 6em;
 }
 
@@ -22,6 +22,12 @@ main > .container {
 
 code {
   font-size: 80%;
+}
+
+.updated_at {
+  text-align: center;
+  font-size: 1.15em;
+  margin: 1.8em 0;
 }
 
 .bd-placeholder-img {
@@ -124,7 +130,6 @@ a:hover {
 }
 
 @media (max-width: 576px) {
-  .btn-cgrp{margin-left: -15px;width:calc(100% + 15px) !important}
   .btn-cgrp .btn{border-radius: 0 !important}
   .hide_small { display: none; }
 }
