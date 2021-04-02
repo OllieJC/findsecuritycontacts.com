@@ -32,19 +32,16 @@ def genSecurityTxtForDomain(x: dict) -> dict:
     num = int(re_item.group("num"))
     val = re_item.group("val")
 
-    if val:
-        details = getSecurityTxt(val)
-        details.update({"top_index": num})
+    details = getSecurityTxt(val)
+    details.update({"top_index": num})
 
-        result = renderTemplate("domain.html", {"res": details})
+    result = renderTemplate("domain.html", {"res": details})
 
-        f = open(f"{top_sites}{val}", "w")
-        f.write(result)
-        f.close()
+    f = open(f"{top_sites}{val}", "w")
+    f.write(result)
+    f.close()
 
-        return details
-    else:
-        return {}
+    return details
 
 
 def genStaticFiles(results: list):
@@ -82,7 +79,7 @@ if __name__ == "__main__":
 
     domains_raw = []
     f = open("assets/top500Domains.txt")
-    domains_raw = f.read().split("\n")
+    domains_raw = f.read().strip().split("\n")
     f.close()
 
     if domains_raw:
