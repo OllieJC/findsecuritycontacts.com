@@ -87,7 +87,7 @@ if __name__ == "__main__":
 
         results = []
 
-        with Pool(int(os.environ.get("POOL_SIZE", "8"))) as p:
+        with Pool(int(os.environ.get("POOL_SIZE", "15"))) as p:
             results = p.map(genSecurityTxtForDomain, domains_list)
 
         genStaticFiles(results)
