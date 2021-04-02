@@ -6,6 +6,7 @@ endpoint = f"https://{host}"
 method = "GET"
 content_type = "application/json"
 local_tz = "America/Los_Angeles"
+AWS_MAX_COUNT = 100
 
 
 def parse(content: dict) -> list:
@@ -14,24 +15,27 @@ def parse(content: dict) -> list:
     """
     ranking = []
 
-    entries = content["Ats"]["Results"]["Result"]["Alexa"]["TopSites"]["Country"][
-        "Sites"
-    ]["Site"]
+    try:
+        entries = content["Ats"]["Results"]["Result"]["Alexa"]["TopSites"]["Country"][
+            "Sites"
+        ]["Site"]
 
-    for e in entries:
-        ranking.append(f'{e["Country"]["Rank"]}:{e["DataUrl"]}')
+        for e in entries:
+            ranking.append(f'{e["Country"]["Rank"]}:{e["DataUrl"]}')
+    except Exception as e:
+        print(e)
 
     return ranking
 
 
-def getSites(count=100, cc="US") -> list:
+def getSitesWithStart(start, count, cc) -> list:
 
     canonical_uri = "/api"
     canonical_querystring = "Action=Topsites&Output=json"
     canonical_querystring += "&" + f"Count={count}"
     canonical_querystring += "&" + f"CountryCode={cc}"
     canonical_querystring += "&" + "ResponseGroup=Country"
-    canonical_querystring += "&" + "Start=1"
+    canonical_querystring += "&" + f"Start={start}"
 
     headers = {
         "Accept": "application/json",
@@ -42,9 +46,22 @@ def getSites(count=100, cc="US") -> list:
     request_url = f"{endpoint}{canonical_uri}?{canonical_querystring}"
     r = requests.get(request_url, headers=headers)
 
-    print(r.status_code)
     if r.status_code == 200:
         return parse(r.json())
     else:
         print(r.text)
         return []
+
+
+def getSites(count=100, cc="US"):
+    result = []
+
+    start = 1
+
+    for i in range(int(count / AWS_MAX_COUNT)):
+        result.extend(getSitesWithStart(start, AWS_MAX_COUNT, cc))
+        start += AWS_MAX_COUNT
+
+    result.extend(getSitesWithStart(start, count % AWS_MAX_COUNT, cc))
+
+    return result
