@@ -66,13 +66,31 @@ def getOrSetAssetSRI(filename: str) -> str:
     return asset_sris[filename]
 
 
-def renderTemplate(filename: str, params: dict = {}, domain: str = "") -> str:
+def renderTemplate(
+    filename: str, params: dict = {}, domain: str = "gotsecuritytxt.com"
+) -> str:
     params.update({"filename": filename})
     params.update({"updated_at": time.strftime("%H:%M:%S%z on %d %B %Y")})
     params.update({"updated_at_short": time.strftime("%H:%M %d %b %Y")})
+    params.update({"domain": domain})
 
-    if domain:
-        params.update({"domain": domain})
+    description = "See whether top websites have a security.txt file, or query any website to see if it has a security.txt file and whether it parses correctly."
+
+    canonical = ""
+
+    if "country" in params and params["country"] == "United States":
+        canonical = f"https://{domain}/us"
+    elif "country" in params and params["country"] == "Great Britain":
+        canonical = f"https://{domain}/gb"
+    elif filename == "query.html":
+        canonical = f"https://{domain}/query"
+    elif filename == "domain.html":
+        canonical = f"https://{domain}/{filename}"
+        description = f"This is the security.txt file for {domain}"
+    else:
+        print(f"Skipping canonical and description for: {filename}")
+
+    params.update({"canonical": canonical})
 
     for x in [
         ["bs_min_css_hash", "assets/css/bootstrap.min.css"],

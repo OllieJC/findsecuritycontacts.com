@@ -4,8 +4,8 @@
   <div>
     <div class="btn-cgrp" role="group">
       <span class="btn alert-info">Top {{ total }} sites in {{ country }}</span>
-      <span class="btn alert-success">{{ has_contacts }} <i class="fas fa-check"></i> ({{ '{0:0.1f}'.format((has_contacts/total)*100) }}%)</span>
-      <span class="btn alert-danger">{{ no_contacts }} <i class="fas fa-times"></i> ({{ '{0:0.1f}'.format((no_contacts/total)*100) }}%)</span>
+      <span class="btn alert-success">{{ has_contacts }} <i class="fas fa-check" aria-hidden="true"></i> ({{ '{0:0.1f}'.format((has_contacts/total)*100) }}%)</span>
+      <span class="btn alert-danger">{{ no_contacts }} <i class="fas fa-check" aria-hidden="true"></i> ({{ '{0:0.1f}'.format((no_contacts/total)*100) }}%)</span>
       <span class="btn alert-info">{{ updated_at_short }}</span>
 		</div>
   </div>
@@ -36,17 +36,17 @@
 
             {% if n["has_contact"] -%}
 
-              <td class="hide_small">{{ pb(n["has_contact"]) }} <i class="fas fa-check"></i></td>
+              <td class="hide_small">{{ pb(n["has_contact"]) }} <i class="fas fa-check" aria-hidden="true"></i></td>
 
               {% if n["sectxt_type"] == 3 or n["sectxt_type"] == 4 -%}
-                <td class="hide_medium">http <i class="fas fa-lock-open"></i></td>
+                <td class="hide_medium">http <i class="fas fa-check" aria-hidden="true"></i></td>
               {% elif n["sectxt_type"] == 1 or n["sectxt_type"] == 2 -%}
-                <td class="hide_medium">https <i class="fas fa-lock"></i></td>
+                <td class="hide_medium">https <i class="fas fa-check" aria-hidden="true"></i></td>
               {% endif -%}
 
             {% else -%}
 
-              <td class="hide_small">{{ pb(n["has_contact"]) }} <i class="fas fa-times"></i></td>
+              <td class="hide_small">{{ pb(n["has_contact"]) }} <i class="fas fa-check" aria-hidden="true"></i></td>
               <td class="hide_medium">&nbsp;</td>
 
             {% endif -%}

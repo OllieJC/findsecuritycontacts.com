@@ -80,11 +80,14 @@ def getSites(count=100, cc="US"):
     try:
         head = s3.head_object(Bucket=bucket, Key=key)
         print(f"Found {key}, checking if valid: {head['LastModified']}")
-        if head["LastModified"] >= past:
-            print(f"{key} is still valid!")
-            valid = True
+        if "json" in head["ContentType"]:
+            if head["LastModified"] >= past:
+                print(f"{key} is still valid!")
+                valid = True
+            else:
+                print(f"{key} is no longer valid...")
         else:
-            print(f"{key} is no longer valid...")
+            print(f"Weird content type found ({head['ContentType']}) so skipping")
     except botocore.exceptions.ClientError as e:
         if e.response["Error"]["Code"] != "404":
             # Something else has gone wrong.

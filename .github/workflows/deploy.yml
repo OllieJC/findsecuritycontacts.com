@@ -51,3 +51,4 @@ jobs:
           aws s3 cp dist/gb s3://gotsecuritytxt.com --acl public-read --cache-control "public, max-age=60" --content-type "text/html"
           aws s3 cp dist/query s3://gotsecuritytxt.com --acl public-read --cache-control "public, max-age=60" --content-type "text/html"
           aws s3 cp dist/security.txt s3://gotsecuritytxt.com --acl public-read --cache-control "public, max-age=86400"
+          aws s3 cp dist/robots.txt s3://gotsecuritytxt.com --acl public-read --cache-control "public, max-age=86400"

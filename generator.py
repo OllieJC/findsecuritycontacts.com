@@ -64,6 +64,7 @@ def genStaticFiles(results: list, us_domains_list: list, gb_domains_list: list):
         ["index.html", ["gb", "gb.html"]],
         ["query.html", ["query", "query.html"]],
         ["security.txt", ["security.txt", ".well-known/security.txt"]],
+        ["robots.txt"],
     ]:
         params = {}
         if x[0] == "index.html":
