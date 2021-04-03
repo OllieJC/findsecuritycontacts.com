@@ -26,7 +26,8 @@ def getSecurityTxt(domain: str):
 
 def getSecurityTxtFormat(domain: str, uf: str):
     try:
-        req = requests.get(uf.format(domain), verify=True, timeout=2)
+        headers = {"User-Agent": "My User Agent 1.0"}
+        req = requests.get(uf.format(domain), headers=headers, verify=True, timeout=2)
         pr = parseResponse(req.headers, req.text, domain, req.url, req.status_code)
         return pr
     except:
@@ -36,7 +37,7 @@ def getSecurityTxtFormat(domain: str, uf: str):
 def parseResponse(headers: dict, body: str, domain: str, url: str, status_code: int):
     lower_body = body.lower().strip()
 
-    has_contact = "contact:" in lower_body
+    has_contact = re.search("(?mi)^contact:", lower_body) is not None
 
     res = {
         "domain": domain,

@@ -1,3 +1,5 @@
 jinja2
 subresource-integrity
 requests
+boto3
+pytz
