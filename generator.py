@@ -48,14 +48,16 @@ def genStaticFiles(results: list, us_domains_list: list, gb_domains_list: list):
         for x in us_domains_list:
             srd = splitRankedDomain(x)
             if r["domain"] == srd["domain"]:
-                r.update({"top_index": srd["rank"]})
-                us_results.append(r)
+                y = dict(r)
+                y.update({"top_index": srd["rank"]})
+                us_results.append(y)
 
         for x in gb_domains_list:
             srd = splitRankedDomain(x)
             if r["domain"] == srd["domain"]:
-                r.update({"top_index": srd["rank"]})
-                gb_results.append(r)
+                y = dict(r)
+                y.update({"top_index": srd["rank"]})
+                gb_results.append(y)
 
     for x in [
         ["index.html", ["index.html", "us"]],
