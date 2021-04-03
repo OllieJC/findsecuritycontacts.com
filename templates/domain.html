@@ -3,10 +3,21 @@
   <a href="#" onclick="history.back();" class="back">Back</a>
   <h2>{{ res["domain"] }}</h2>
   <p>URL: {{ makeLink(res["url"])|safe }}</p>
+  <p>Scanned: {{ updated_at }}</p>
   <p>Status: {{ res["status_code"] }}</p>
-  <p>Has a contact: {{ pb(res["has_contact"]) }}</p>
+  <p>Scheme:
+  {% if res["sectxt_type"] == 3 or res["sectxt_type"] == 4 -%}
+    http <i class="fas fa-lock-open"></i>
+  {% elif res["sectxt_type"] == 1 or res["sectxt_type"] == 2 -%}
+    https <i class="fas fa-lock"></i>
+  {% endif -%}
+  </p>
 
+  <p>
+    Has a contact: {{ pb(res["has_contact"]) }}
   {% if res["has_contact"] -%}
+    <i class="fas fa-check"></i>
+    </p>
     <div>
       <p>Contacts:</p>
       <ul>
@@ -28,6 +39,9 @@
     {% endif -%}
 
     <p>Minimal version: <pre>{{ res["min_text"] }}</pre></p>
+  {% else -%}
+    <i class="fas fa-times"></i>
+    </p>
   {% endif -%}
 
   {% if res["full_text"] -%}

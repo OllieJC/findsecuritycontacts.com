@@ -3,14 +3,11 @@
 <div>
   <div>
     <div class="btn-cgrp" role="group">
-      <span class="btn alert-info">Top {{ total }}</span>
-      <span class="btn alert-success">{{ has_contacts }} OK</span>
-      <span class="btn alert-danger">{{ no_contacts }} bad</span>
+      <span class="btn alert-info">Top {{ total }} sites in {{ country }}</span>
+      <span class="btn alert-success">{{ has_contacts }} <i class="fas fa-check"></i> ({{ '{0:0.1f}'.format((has_contacts/total)*100) }}%)</span>
+      <span class="btn alert-danger">{{ no_contacts }} <i class="fas fa-times"></i> ({{ '{0:0.1f}'.format((no_contacts/total)*100) }}%)</span>
+      <span class="btn alert-info">{{ updated_at_short }}</span>
 		</div>
-  </div>
-  
-  <div class="updated_at">
-    Updated at: {{ updated_at }}
   </div>
 
   <table class="table table-striped" cellspacing="0" width="100%">
@@ -49,7 +46,7 @@
 
             {% else -%}
 
-              <td class="hide_small">{{ pb(n["has_contact"]) }} <i class="fas fa-times"></td>
+              <td class="hide_small">{{ pb(n["has_contact"]) }} <i class="fas fa-times"></i></td>
               <td class="hide_medium">&nbsp;</td>
 
             {% endif -%}

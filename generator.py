@@ -60,8 +60,9 @@ def genStaticFiles(results: list, us_domains_list: list, gb_domains_list: list):
                 gb_results.append(y)
 
     for x in [
-        ["index.html", ["index.html", "us"]],
-        ["index.html", ["gb"]],
+        ["index.html", ["index.html", "us", "us.html"]],
+        ["index.html", ["gb", "gb.html"]],
+        ["query.html", ["query", "query.html"]],
         ["security.txt", ["security.txt", ".well-known/security.txt"]],
     ]:
         params = {}
@@ -114,8 +115,8 @@ def splitRankedDomain(x: str) -> dict:
 if __name__ == "__main__":
     setupDist()
 
-    us_domains_list = ats.getSites(250, "US")
-    gb_domains_list = ats.getSites(250, "GB")
+    us_domains_list = ats.getSites(5, "US")
+    gb_domains_list = ats.getSites(5, "GB")
 
     domain_list = set()
 

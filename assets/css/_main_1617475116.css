@@ -5,8 +5,7 @@
 /* Not required for template or sticky footer method. */
 
 main > .container {
-  padding: 2em 1.5em;
-  margin-bottom: 6em;
+  padding: 4em 1.5em 8em 1.5em;
 }
 
 .footer {
@@ -52,6 +51,7 @@ pre {
 a:focus {
   text-decoration: none;
   background-color: #fd0;
+  color: black !important;
   box-shadow: 0 -2px #fd0,0 4px #0b0c0c;
 }
 

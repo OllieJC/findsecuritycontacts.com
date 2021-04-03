@@ -1,1 +1,3 @@
-Contact: OllieJC
+# would have been ironic, huh?
+Contact: https://github.com/OllieJC/gotsecuritytxt.com/issues
+Contact: mailto:gotsecuritytxt.com@olliejc.uk
