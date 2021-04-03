@@ -26,7 +26,7 @@ def getSecurityTxt(domain: str):
 
 def getSecurityTxtFormat(domain: str, uf: str):
     try:
-        headers = {"User-Agent": "My User Agent 1.0"}
+        headers = {"User-Agent": "python requests - gotsecuritytxt.com"}
         req = requests.get(uf.format(domain), headers=headers, verify=True, timeout=2)
         pr = parseResponse(req.headers, req.text, domain, req.url, req.status_code)
         return pr
