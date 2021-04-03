@@ -9,14 +9,14 @@
   {% if res["sectxt_type"] == 3 or res["sectxt_type"] == 4 -%}
     http <i class="fas fa-lock-open" aria-hidden="true"></i>
   {% elif res["sectxt_type"] == 1 or res["sectxt_type"] == 2 -%}
-    https <i class="fas fa-lock-open" aria-hidden="true"></i>
+    https <i class="fas fa-lock" aria-hidden="true"></i>
   {% endif -%}
   </p>
 
   <p>
     Has a contact: {{ pb(res["has_contact"]) }}
   {% if res["has_contact"] -%}
-    <i class="fas fa-lock-open" aria-hidden="true"></i>
+    <i class="fas fa-check" aria-hidden="true"></i>
     </p>
     <div>
       <p>Contacts:</p>
@@ -40,7 +40,7 @@
 
     <p>Minimal version: <pre>{{ res["min_text"] }}</pre></p>
   {% else -%}
-    <i class="fas fa-lock-open" aria-hidden="true"></i>
+    <i class="fas fa-times" aria-hidden="true"></i>
     </p>
   {% endif -%}
 
