@@ -115,8 +115,8 @@ def splitRankedDomain(x: str) -> dict:
 if __name__ == "__main__":
     setupDist()
 
-    us_domains_list = ats.getSites(5, "US")
-    gb_domains_list = ats.getSites(5, "GB")
+    us_domains_list = ats.getSites(250, "US")
+    gb_domains_list = ats.getSites(250, "GB")
 
     domain_list = set()
 
