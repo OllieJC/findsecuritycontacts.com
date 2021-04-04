@@ -102,7 +102,7 @@ def renderTemplate(
         ["jq_js_hash", "assets/js/jquery.min.js"],
         ["bsb_js_hash", "assets/js/bootstrap.bundle.min.js"],
         ["bs_table_js_hash", "assets/js/bootstrap-table.min.js"],
-        ["main_js_hash", "assets/js/_main.js"],
+        ["main_js_hash", "assets/js/_main_1617553676.js"],
     ]:
         params.update({x[0]: getOrSetAssetSRI(x[1])})
 

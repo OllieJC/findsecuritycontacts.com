@@ -2,16 +2,19 @@
 {% block content %}
   <a href="#" onclick="history.back();" class="back">Back</a>
   <h2>{{ res["domain"] }}</h2>
-  <p>URL: {{ makeLink(res["url"])|safe }}</p>
   <p>Scanned: {{ updated_at }}</p>
-  <p>Status: {{ res["status_code"] }}</p>
-  <p>Scheme:
-  {% if res["sectxt_type"] == 3 or res["sectxt_type"] == 4 -%}
-    http <i class="fas fa-lock-open" aria-hidden="true"></i>
-  {% elif res["sectxt_type"] == 1 or res["sectxt_type"] == 2 -%}
-    https <i class="fas fa-lock" aria-hidden="true"></i>
+
+  {% if res["has_contact"] -%}
+    <p>URL: {{ makeLink(res["url"])|safe }}</p>
+    <p>Status: {{ res["status_code"] }}</p>
+    <p>Scheme:
+    {% if res["sectxt_type"] == 3 or res["sectxt_type"] == 4 -%}
+      http <i class="fas fa-lock-open" aria-hidden="true"></i>
+    {% elif res["sectxt_type"] == 1 or res["sectxt_type"] == 2 -%}
+      https <i class="fas fa-lock" aria-hidden="true"></i>
+    {% endif -%}
+    </p>
   {% endif -%}
-  </p>
 
   <p>
     Has a contact: {{ pb(res["has_contact"]) }}
