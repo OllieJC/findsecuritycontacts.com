@@ -69,6 +69,7 @@ def genStaticFiles(results: list, us_domains_list: list, gb_domains_list: list):
     for x in [
         ["index.html", ["index.html", "us", "us.html"]],
         ["index.html", ["gb", "gb.html"]],
+        ["pending.html"],
         ["query.html", ["query", "query.html"]],
         ["security.txt", ["security.txt", ".well-known/security.txt"]],
         ["site.webmanifest", ["site.webmanifest", "manifest.json"]],
