@@ -7,7 +7,14 @@
       <span class="btn alert-success">{{ has_contacts }} <i class="fas fa-check" aria-hidden="true"></i> ({{ '{0:0.1f}'.format((has_contacts/total)*100) }}%)</span>
       <span class="btn alert-danger">{{ no_contacts }} <i class="fas fa-times" aria-hidden="true"></i> ({{ '{0:0.1f}'.format((no_contacts/total)*100) }}%)</span>
       <span class="btn alert-info">{{ updated_at_short }}</span>
-		</div>
+    </div>
+  </div>
+
+  <div>
+    <p>A security.txt file is a way for websites to show how security researchers can get in contact and whether there is any bug bountry or vulnerability disclosure policy.</p>
+    <p>This website scans the top {{ total }} sites daily (your viewing top sites in {{ country }} currently) for their security.txt file and parses it.<br>
+	    You can also <a href="/query">query</a> any website to see if there is a security.txt file and whether it appears to be formatted correctly.</p>
+    <p>You can find more about the security.txt file and the RFC status on <a href="https://securitytxt.org">securitytxt.org</a></p>
   </div>
 
   <table class="table table-striped" cellspacing="0" width="100%">
