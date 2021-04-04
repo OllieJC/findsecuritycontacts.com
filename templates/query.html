@@ -4,8 +4,14 @@
   <h2>Query</h2>
   <p>&nbsp;</p>
   <p>
-    <label for="domain">Domain</label>
-    <input type="text" id="domain" name="domain">
-    <button id="submitQuery">Scan</button>
+    <form action="/query" method="get">
+      <div class="form-group">
+        <label id="lblDom" for="domain">Domain</label>
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" name="domain" id="domain" aria-describedby="lblDom">
+        </div>
+      </div>
+      <button id="submitQuery" type="button" class="btn btn-dark">Scan</button>
+    </form>
   </p>
 {% endblock %}
