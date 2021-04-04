@@ -11,6 +11,8 @@ Handler = http.server.SimpleHTTPRequestHandler
 Handler.extensions_map = {
     "": "text/html",
     ".css": "text/css",
+    ".json": "application/json",
+    ".webmanifest": "application/json",
     ".js": "application/javascript",
     ".eot": "application/vnd.ms-fontobject",
     ".svg": "image/svg+xml",

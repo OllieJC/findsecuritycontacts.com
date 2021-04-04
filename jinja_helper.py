@@ -88,15 +88,17 @@ def renderTemplate(
         canonical = f"https://{domain}/{filename}"
         description = f"This is the security.txt file for {domain}"
     else:
+        description = ""
         print(f"Skipping canonical and description for: {filename}")
 
+    params.update({"description": description})
     params.update({"canonical": canonical})
 
     for x in [
         ["bs_min_css_hash", "assets/css/bootstrap.min.css"],
         ["bs_table_css_hash", "assets/css/bootstrap-table.min.css"],
         ["main_css_hash", "assets/css/_main_1617475116.css"],
-        ["font_awesome_css_hash", "assets/css/all.css"],
+        ["font_awesome_css_hash", "assets/css/all.min.css"],
         ["jq_js_hash", "assets/js/jquery.min.js"],
         ["bsb_js_hash", "assets/js/bootstrap.bundle.min.js"],
         ["bs_table_js_hash", "assets/js/bootstrap-table.min.js"],

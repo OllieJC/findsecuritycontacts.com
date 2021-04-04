@@ -1,0 +1,46 @@
+{
+  "short_name": "gotsecuritytxt.com",
+  "name": "gotsecuritytxt.com - do top sites have a security.txt file?",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#7952b3",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#7952b3",
+  "shortcuts": [
+    {
+      "name": "Check top sites in United States",
+      "short_name": "United States",
+      "description": "See if top sites in United States have a security.txt file",
+      "url": "/us",
+      "icons": []
+    },
+    {
+      "name": "Check top sites in Great Britain",
+      "short_name": "Great Britain",
+      "description": "See if top sites in Great Britain have a security.txt file",
+      "url": "/gb",
+      "icons": []
+    },
+    {
+      "name": "Query a sit",
+      "short_name": "Query",
+      "description": "Query a site for its security.txt file",
+      "url": "/query",
+      "icons": []
+    }
+  ],
+  "description": "Top sites security.txt file status and query tool",
+  "screenshots": []
+}
