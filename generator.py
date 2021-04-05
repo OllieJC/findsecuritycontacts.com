@@ -70,6 +70,7 @@ def genStaticFiles(results: list, us_domains_list: list, gb_domains_list: list):
         ["index.html", ["index.html", "us", "us.html"]],
         ["index.html", ["gb", "gb.html"]],
         ["pending.html"],
+        ["gen-error.html"],
         ["query.html", ["query", "query.html"]],
         ["security.txt", ["security.txt", ".well-known/security.txt"]],
         ["site.webmanifest", ["site.webmanifest", "manifest.json"]],
