@@ -31,10 +31,14 @@ jobs:
 
       - name: Build static site
         run: |
-          echo "${{ github.event_name }}"
-          exit 1
+          if [ "${{ github.event_name }}" != 'push' ]; then
+            GET_SEC_TXT="true"
+            export GET_SEC_TXT=$GET_SEC_TXT
+          fi
+
           ATS_KEY="${{ secrets.ATS_KEY }}"
           export ATS_KEY=$ATS_KEY
+
           python -m pip install -r requirements.txt
           python generator.py
 
@@ -42,16 +46,20 @@ jobs:
         run: |
           aws s3 cp dist/.well-known/ s3://gotsecuritytxt.com/.well-known/ --recursive --acl public-read --cache-control "public, max-age=86400"
           aws s3 cp dist/assets/ s3://gotsecuritytxt.com/assets/ --recursive --acl public-read --cache-control "public, max-age=31536000"
-          aws s3 cp dist/top/ s3://gotsecuritytxt.com/top/ --recursive --acl public-read --cache-control "public, max-age=3600" --content-type "text/html"
-          aws s3 cp dist/index.html s3://gotsecuritytxt.com --acl public-read --cache-control "public, max-age=3600" --content-type "text/html"
-          aws s3 cp dist/us.html s3://gotsecuritytxt.com --acl public-read --cache-control "public, max-age=3600" --content-type "text/html"
-          aws s3 cp dist/gb.html s3://gotsecuritytxt.com --acl public-read --cache-control "public, max-age=3600" --content-type "text/html"
           aws s3 cp dist/query.html s3://gotsecuritytxt.com --acl public-read --cache-control "private, max-age=60" --content-type "text/html"
-          aws s3 cp dist/us s3://gotsecuritytxt.com --acl public-read --cache-control "public, max-age=3600" --content-type "text/html"
-          aws s3 cp dist/gb s3://gotsecuritytxt.com --acl public-read --cache-control "public, max-age=3600" --content-type "text/html"
+          aws s3 cp dist/gen-error.html s3://gotsecuritytxt.com --acl public-read --cache-control "private, max-age=60" --content-type "text/html"
           aws s3 cp dist/query s3://gotsecuritytxt.com --acl public-read --cache-control "private, max-age=60" --content-type "text/html"
           aws s3 cp dist/pending.html s3://gotsecuritytxt.com --acl public-read --cache-control "private, max-age=60" --content-type "text/html"
           aws s3 cp dist/security.txt s3://gotsecuritytxt.com --acl public-read --cache-control "public, max-age=86400"
           aws s3 cp dist/robots.txt s3://gotsecuritytxt.com --acl public-read --cache-control "public, max-age=86400"
           aws s3 cp dist/site.webmanifest s3://gotsecuritytxt.com --acl public-read --cache-control "public, max-age=60" --content-type "application/json"
           aws s3 cp dist/manifest.json s3://gotsecuritytxt.com --acl public-read --cache-control "public, max-age=60" --content-type "application/json"
+
+          if [ "${{ github.event_name }}" != 'push' ]; then
+            aws s3 cp dist/top/ s3://gotsecuritytxt.com/top/ --recursive --acl public-read --cache-control "public, max-age=3600" --content-type "text/html"
+            aws s3 cp dist/index.html s3://gotsecuritytxt.com --acl public-read --cache-control "public, max-age=3600" --content-type "text/html"
+            aws s3 cp dist/us.html s3://gotsecuritytxt.com --acl public-read --cache-control "public, max-age=3600" --content-type "text/html"
+            aws s3 cp dist/gb.html s3://gotsecuritytxt.com --acl public-read --cache-control "public, max-age=3600" --content-type "text/html"
+            aws s3 cp dist/us s3://gotsecuritytxt.com --acl public-read --cache-control "public, max-age=3600" --content-type "text/html"
+            aws s3 cp dist/gb s3://gotsecuritytxt.com --acl public-read --cache-control "public, max-age=3600" --content-type "text/html"
+          fi

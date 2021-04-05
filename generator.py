@@ -77,6 +77,8 @@ def genStaticFiles(results: list, us_domains_list: list, gb_domains_list: list):
     ]:
         params = {}
         if x[0] == "index.html":
+            if len(results) == 0:
+                continue
 
             if "us" in x[1]:
                 total = len(us_results)
@@ -130,30 +132,33 @@ if __name__ == "__main__":
         domain = sys.argv[1]
         genSecurityTxtForDomain(domain, gen_sites)
     else:
-        us_domains_list = ats.getSites(250, "US")
-        gb_domains_list = ats.getSites(250, "GB")
-
-        domain_list = set()
-
-        for x in us_domains_list:
-            srd = splitRankedDomain(x)
-            domain_list.add(srd["domain"])
-
-        for x in gb_domains_list:
-            srd = splitRankedDomain(x)
-            domain_list.add(srd["domain"])
-
-        if len(domain_list) > 0:
-            print("Got domain lists, counts:")
-            print("Total -", len(domain_list))
-            print("US -", len(us_domains_list))
-            print("GB -", len(gb_domains_list))
-        else:
-            raise Exception("No domains")
-
         results = []
+        us_domains_list = []
+        gb_domains_list = []
 
-        with Pool(int(os.environ.get("POOL_SIZE", "15"))) as p:
-            results = p.map(genSecurityTxtForDomain, domain_list)
+        if os.environ.get("GET_SEC_TXT", "false") == "true":
+            us_domains_list = ats.getSites(250, "US")
+            gb_domains_list = ats.getSites(250, "GB")
+
+            domain_list = set()
+
+            for x in us_domains_list:
+                srd = splitRankedDomain(x)
+                domain_list.add(srd["domain"])
+
+            for x in gb_domains_list:
+                srd = splitRankedDomain(x)
+                domain_list.add(srd["domain"])
+
+            if len(domain_list) > 0:
+                print("Got domain lists, counts:")
+                print("Total -", len(domain_list))
+                print("US -", len(us_domains_list))
+                print("GB -", len(gb_domains_list))
+            else:
+                raise Exception("No domains")
+
+            with Pool(int(os.environ.get("POOL_SIZE", "15"))) as p:
+                results = p.map(genSecurityTxtForDomain, domain_list)
 
         genStaticFiles(results, us_domains_list, gb_domains_list)
