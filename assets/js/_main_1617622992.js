@@ -11,7 +11,7 @@ if (window.location.pathname == "/query" && window.history.replaceState) {
       window.history.replaceState({}, "gotsecuritytxt.com", `/query/${tmp.hostname}`);
     }
   } catch (e) {
-    console("Failed to rewrite URL: ", e);
+    console.log("Failed to rewrite URL: ", e);
   }
 }
 

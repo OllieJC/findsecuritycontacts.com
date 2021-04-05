@@ -99,10 +99,10 @@ def renderTemplate(
         ["bs_table_css_hash", "assets/css/bootstrap-table.min.css"],
         ["main_css_hash", "assets/css/_main_1617475116.css"],
         ["font_awesome_css_hash", "assets/css/all.min.css"],
-        ["jq_js_hash", "assets/js/jquery.min.js"],
-        ["bsb_js_hash", "assets/js/bootstrap.bundle.min.js"],
-        ["bs_table_js_hash", "assets/js/bootstrap-table.min.js"],
-        ["main_js_hash", "assets/js/_main_1617616822.js"],
+        # ["jq_js_hash", "assets/js/jquery.min.js"],
+        # ["bsb_js_hash", "assets/js/bootstrap.bundle.min.js"],
+        # ["bs_table_js_hash", "assets/js/bootstrap-table.min.js"],
+        ["main_js_hash", "assets/js/_main_1617622992.js"],
     ]:
         params.update({x[0]: getOrSetAssetSRI(x[1])})
 
