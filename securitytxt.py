@@ -35,9 +35,7 @@ def getSecurityTxtFormat(domain: str, uf: str):
 
 
 def parseResponse(headers: dict, body: str, domain: str, url: str, status_code: int):
-    lower_body = body.lower().strip()
-
-    has_contact = re.search("(?mi)^contact:", lower_body) is not None
+    has_contact = re.search("(?mi)^contact:", body) is not None
 
     res = {
         "domain": domain,
@@ -64,7 +62,7 @@ def parseResponse(headers: dict, body: str, domain: str, url: str, status_code: 
     if has_contact:
         res["full_text"] = html.escape(body.strip())
 
-        actual_body = str(lower_body)
+        actual_body = str(res["full_text"])
 
         has_blocks = re.search("(?P<hyphens>\-\-+)", actual_body)
         if has_blocks:
@@ -74,14 +72,12 @@ def parseResponse(headers: dict, body: str, domain: str, url: str, status_code: 
                     actual_body = block
                     break
 
-        actual_body = html.escape(actual_body.strip())
-
         res["min_text"] = ""
 
         for line in actual_body.split("\n"):
             stripped_line = line.strip()
             line_search = re.search(
-                r"^(?: +)?(?P<key>[a-z\-]+)\:\s?(?P<value>.+?)$", stripped_line,
+                r"^(?: +)?(?P<key>[A-Za-z\-]+)\:\s?(?P<value>.+?)$", stripped_line,
             )
             if line_search:
                 for x in [
@@ -95,15 +91,18 @@ def parseResponse(headers: dict, body: str, domain: str, url: str, status_code: 
                     "Hiring",
                     "Policy",
                 ]:
-                    if x.lower() in line_search.group("key"):
+                    if x.lower() in line_search.group("key").lower():
 
                         if x == "Acknowledgments":
                             x = "Acknowledgements"
 
-                        res["min_text"] += f"{stripped_line}\n"
+                        val = line_search.group("value")
+
+                        res["min_text"] += f"{x}: {val}\n"
+
                         if type(res["items"][x]) == list:
-                            res["items"][x].append(line_search.group("value"))
+                            res["items"][x].append(val)
                         else:
-                            res["items"][x] = line_search.group("value")
+                            res["items"][x] = val
 
     return res

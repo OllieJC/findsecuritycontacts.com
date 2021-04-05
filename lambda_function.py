@@ -1,10 +1,11 @@
 import generator
 import boto3
+from urllib.parse import urlparse
 
 
 def lambda_handler(event, context):
     if "domain" in event:
-        domain = event["domain"]
+        domain = urlparse(event["domain"]).hostname
         if domain:
             body = generator.genSecurityTxtForDomain(domain, return_body=True)
             if body:
