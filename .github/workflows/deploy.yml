@@ -31,7 +31,7 @@ jobs:
 
       - name: Build static site
         run: |
-          echo ${{ github.event }} | jq
+          echo "${{ github.event }}"
           exit 1
           ATS_KEY="${{ secrets.ATS_KEY }}"
           export ATS_KEY=$ATS_KEY
