@@ -5,7 +5,12 @@ from urllib.parse import urlparse
 
 def lambda_handler(event, context):
     if "domain" in event:
-        domain = urlparse(event["domain"]).hostname
+        domain = event["domain"]
+
+        if "://" not in domain:
+            domain = f"http://{domain}"
+        domain = urlparse(domain).hostname
+
         if domain:
             body = generator.genSecurityTxtForDomain(domain, return_body=True)
             if body:
@@ -20,3 +25,6 @@ def lambda_handler(event, context):
                     ContentType="text/html",
                     CacheControl="public, max-age=60",
                 )
+            print(f"{event['domain']} - success.")
+        else:
+            print(f"{event['domain']} - failed.")
