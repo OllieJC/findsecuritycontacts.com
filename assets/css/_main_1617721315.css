@@ -4,6 +4,20 @@
 -------------------------------------------------- */
 /* Not required for template or sticky footer method. */
 
+.mr-auto, .mx-auto {
+    margin-right: auto !important;
+}
+
+.form-inline .form-control {
+    display: inline-block;
+    width: auto;
+    vertical-align: middle;
+}
+
+#navbarCollapse.show #navDomain {
+    margin: 1em 0;
+}
+
 main > .container {
   padding: 4em 1.5em 8em 1.5em;
 }
