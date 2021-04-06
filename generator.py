@@ -68,7 +68,9 @@ def genStaticFiles(results: list, us_domains_list: list, gb_domains_list: list):
 
     for x in [
         ["index.html", ["index.html", "us", "us.html"]],
+        ["index.html", ["us-only-valid"]],
         ["index.html", ["gb", "gb.html"]],
+        ["index.html", ["gb-only-valid"]],
         ["pending.html"],
         ["gen-error.html"],
         ["query.html", ["query", "query.html"]],
@@ -81,7 +83,7 @@ def genStaticFiles(results: list, us_domains_list: list, gb_domains_list: list):
             if len(results) == 0:
                 continue
 
-            if "us" in x[1]:
+            if "us" in x[1] or "us-only-valid" in x[1]:
                 total = len(us_results)
                 has_contacts = sum(1 for x in us_results if x["has_contact"])
                 no_contacts = total - has_contacts
@@ -91,9 +93,12 @@ def genStaticFiles(results: list, us_domains_list: list, gb_domains_list: list):
                     "total": total,
                     "has_contacts": has_contacts,
                     "no_contacts": no_contacts,
+                    "country_short_code": "us",
                 }
+                if "us-only-valid" in x[1]:
+                    params["only_valid"] = True
 
-            if "gb" in x[1]:
+            if "gb" in x[1] or "gb-only-valid" in x[1]:
                 total = len(gb_results)
                 has_contacts = sum(1 for x in gb_results if x["has_contact"])
                 no_contacts = total - has_contacts
@@ -103,7 +108,10 @@ def genStaticFiles(results: list, us_domains_list: list, gb_domains_list: list):
                     "total": total,
                     "has_contacts": has_contacts,
                     "no_contacts": no_contacts,
+                    "country_short_code": "gb",
                 }
+                if "gb-only-valid" in x[1]:
+                    params["only_valid"] = True
 
         result = renderTemplate(x[0], params)
 

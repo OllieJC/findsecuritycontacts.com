@@ -17,6 +17,15 @@
     <p>You can find more about the security.txt file and the RFC status on <a href="https://securitytxt.org">securitytxt.org</a></p>
   </div>
 
+  <div>
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="" id="only_valid" onclick="javascript:window.location.href='/{{ country_short_code }}{{ '' if only_valid else '-only-valid' }}';">
+      <label class="form-check-label" for="only_valid">
+        {{ 'Show all top sites' if only_valid else 'Show only top sites with a valid looking security.txt' }}
+      </label>
+    </div>
+  </div>
+
   <table class="table table-striped" cellspacing="0" width="100%">
     <thead>
       <tr>
@@ -30,7 +39,8 @@
     <tbody>
       {% for n in results|sort(attribute='top_index') %}
         {% if n["domain"] -%}
-          <tr>
+          {% if not only_valid or (only_valid and n['has_contact']) -%}
+          <tr class="{{ 'has_contact' if n['has_contact'] else 'no_contact' }}">
             <td>{{ n["top_index"] }}</td>
 
             {% if n["has_contact"] -%}
@@ -58,6 +68,7 @@
 
             {% endif -%}
           </tr>
+          {% endif -%}
         {% endif -%}
       {% endfor %}
     </tbody>
