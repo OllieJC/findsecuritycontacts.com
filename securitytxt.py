@@ -13,15 +13,13 @@ url_formats = {
 
 
 def getSecurityTxt(domain: str):
-    res = {}
-
     for x in url_formats:
         res = getSecurityTxtFormat(domain, url_formats[x])
-        res.update({"sectxt_type": x})
         if res["has_contact"]:
-            break
+            res.update({"sectxt_type": x})
+            return res
 
-    return res
+    return parseResponse({}, "", domain, "", 404)
 
 
 def getSecurityTxtFormat(domain: str, uf: str):
@@ -42,8 +40,12 @@ def parseResponse(headers: dict, body: str, domain: str, url: str, status_code: 
         "url": url,
         "status_code": status_code,
         "has_contact": has_contact,
+        "content_type": html.escape(headers["Content-Type"])
+        if "Content-Type" in headers
+        else "",
         "valid_content_type": (
-            "Content-Type" in headers and headers["Content-Type"] == "text/plain"
+            "Content-Type" in headers
+            and headers["Content-Type"].startswith("text/plain")
         ),
         "full_text": "",
         "min_text": "",

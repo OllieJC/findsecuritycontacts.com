@@ -4,16 +4,29 @@
   <h2>{{ res["domain"] }}</h2>
   <p>Scanned: {{ updated_at }}</p>
 
+  <p>Status: {{ res["status_code"] }}</p>
+  {% if res["content_type"] -%}
+    <p>Content type: {{ res["content_type"] }}
+      {% if res["valid_content_type"] -%}
+        <i class="fas fa-check" aria-hidden="true"></i>
+      {% else -%}
+        <i class="fas fa-times" aria-hidden="true"></i> (should be <i>text/plain</i>)
+      {% endif -%}
+    </p>
+  {% endif -%}
+
+  {% if res["sectxt_type"] -%}
+    <p>Scheme:
+      {% if res["sectxt_type"] == 3 or res["sectxt_type"] == 4 -%}
+        http <i class="fas fa-lock-open" aria-hidden="true"></i>
+      {% elif res["sectxt_type"] == 1 or res["sectxt_type"] == 2 -%}
+        https <i class="fas fa-lock" aria-hidden="true"></i>
+      {% endif -%}
+    </p>
+  {% endif -%}
+
   {% if res["has_contact"] -%}
     <p>URL: {{ makeLink(res["url"])|safe }}</p>
-    <p>Status: {{ res["status_code"] }}</p>
-    <p>Scheme:
-    {% if res["sectxt_type"] == 3 or res["sectxt_type"] == 4 -%}
-      http <i class="fas fa-lock-open" aria-hidden="true"></i>
-    {% elif res["sectxt_type"] == 1 or res["sectxt_type"] == 2 -%}
-      https <i class="fas fa-lock" aria-hidden="true"></i>
-    {% endif -%}
-    </p>
   {% endif -%}
 
   <p>
