@@ -104,7 +104,9 @@ def getSites(count=100, cc="US"):
             start += AWS_MAX_COUNT
 
         results.extend(getSitesWithStart(start, count % AWS_MAX_COUNT, cc))
-        s3Obj.put(Body=json.dumps(results).encode("utf-8"))
+        s3Obj.put(
+            Body=json.dumps(results).encode("utf-8"), ContentType="application/json"
+        )
         print(f"{key} setting results: {len(results)}")
     else:
         body_str = s3Obj.get()["Body"].read().decode()
