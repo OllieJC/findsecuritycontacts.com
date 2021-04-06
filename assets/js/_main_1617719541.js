@@ -1,4 +1,4 @@
-if (window.location.pathname == "/query" && window.history.replaceState) {
+if (window.location.pathname == "/query" && window.location.search.indexOf("domain") != -1) {
   try {
     var urlParams = new URLSearchParams(window.location.search);
     var raw_domain = urlParams.get("domain").toLowerCase();
@@ -8,7 +8,7 @@ if (window.location.pathname == "/query" && window.history.replaceState) {
     }
     var tmp = new URL(raw_domain);
     if (tmp) {
-      window.history.replaceState({}, "gotsecuritytxt.com", `/query/${tmp.hostname}`);
+      window.location.href = `/query/${tmp.hostname}`;
     }
   } catch (e) {
     console.log("Failed to rewrite URL: ", e);

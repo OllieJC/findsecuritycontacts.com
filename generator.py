@@ -35,7 +35,7 @@ def genSecurityTxtForDomain(
     print(f"Attempting to get security.txt for {x}")
     details = getSecurityTxt(x)
 
-    result = renderTemplate("domain.html", {"res": details})
+    result = renderTemplate("domain.html", {"res": details, "dest_domain": x})
 
     if return_body:
         return result
@@ -67,23 +67,23 @@ def genStaticFiles(results: list, us_domains_list: list, gb_domains_list: list):
                 gb_results.append(y)
 
     for x in [
-        ["index.html", ["index.html", "us", "us.html"]],
-        ["index.html", ["us-only-valid"]],
-        ["index.html", ["gb", "gb.html"]],
-        ["index.html", ["gb-only-valid"]],
-        ["pending.html"],
-        ["gen-error.html"],
-        ["query.html", ["query", "query.html"]],
-        ["security.txt", ["security.txt", ".well-known/security.txt"]],
-        ["site.webmanifest", ["site.webmanifest", "manifest.json"]],
-        ["robots.txt"],
+        ["index.html", "top sites in United States", ["index.html", "us", "us.html"]],
+        ["index.html", "valid top sites in United States", ["us-only-valid"]],
+        ["index.html", "top sites in Great Britain", ["gb", "gb.html"]],
+        ["index.html", "valid top sites in Great Britain", ["gb-only-valid"]],
+        ["pending.html", "scanning"],
+        ["gen-error.html", "error"],
+        ["query.html", "query", ["query", "query.html"]],
+        ["security.txt", "", ["security.txt", ".well-known/security.txt"]],
+        ["site.webmanifest", "", ["site.webmanifest", "manifest.json"]],
+        ["robots.txt", ""],
     ]:
         params = {}
         if x[0] == "index.html":
             if len(results) == 0:
                 continue
 
-            if "us" in x[1] or "us-only-valid" in x[1]:
+            if "us" in x[2] or "us-only-valid" in x[2]:
                 total = len(us_results)
                 has_contacts = sum(1 for x in us_results if x["has_contact"])
                 no_contacts = total - has_contacts
@@ -95,10 +95,10 @@ def genStaticFiles(results: list, us_domains_list: list, gb_domains_list: list):
                     "no_contacts": no_contacts,
                     "country_short_code": "us",
                 }
-                if "us-only-valid" in x[1]:
+                if "us-only-valid" in x[2]:
                     params["only_valid"] = True
 
-            if "gb" in x[1] or "gb-only-valid" in x[1]:
+            if "gb" in x[2] or "gb-only-valid" in x[2]:
                 total = len(gb_results)
                 has_contacts = sum(1 for x in gb_results if x["has_contact"])
                 no_contacts = total - has_contacts
@@ -110,15 +110,17 @@ def genStaticFiles(results: list, us_domains_list: list, gb_domains_list: list):
                     "no_contacts": no_contacts,
                     "country_short_code": "gb",
                 }
-                if "gb-only-valid" in x[1]:
+                if "gb-only-valid" in x[2]:
                     params["only_valid"] = True
 
+        if x[1]:
+            params.update({"title": x[1]})
         result = renderTemplate(x[0], params)
 
-        if len(x) == 1:
+        if len(x) == 2:
             paths = [x[0]]
         else:
-            paths = x[1]
+            paths = x[2]
 
         for p in paths:
             f = open(f"{dist}{p}", "w")

@@ -85,8 +85,9 @@ def renderTemplate(
     elif filename == "query.html":
         canonical = f"https://{domain}/query"
     elif filename == "domain.html":
-        canonical = f"https://{domain}/{filename}"
-        description = f"This is the security.txt file for {domain}"
+        canonical = f"https://{domain}/{params['dest_domain']}"
+        description = f"This is the security.txt file for {params['dest_domain']}"
+        params.update({"title": params["dest_domain"]})
     else:
         description = ""
         print(f"Skipping canonical and description for: {filename}")
@@ -102,7 +103,7 @@ def renderTemplate(
         # ["jq_js_hash", "assets/js/jquery.min.js"],
         # ["bsb_js_hash", "assets/js/bootstrap.bundle.min.js"],
         # ["bs_table_js_hash", "assets/js/bootstrap-table.min.js"],
-        ["main_js_hash", "assets/js/_main_1617622992.js"],
+        ["main_js_hash", "assets/js/_main_1617719541.js"],
     ]:
         params.update({x[0]: getOrSetAssetSRI(x[1])})
 
