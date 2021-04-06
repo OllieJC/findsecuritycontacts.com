@@ -56,6 +56,10 @@
               <td class="hide_small">
                 {% if not n["valid_content_type"] -%}
                   <span title="content type looks wrong"><i class="fas fa-info-circle" aria-hidden="true"></i> Kinda </span>
+                {% elif n["sectxt_type"] == 2 -%}
+                  <span title="not in .well-known"><i class="fas fa-info-circle" aria-hidden="true"></i> Kinda </span>
+                {% elif n["sectxt_type"] == 3 or n["sectxt_type"] == 4 -%}
+                  <span title="not served using https"><i class="fas fa-info-circle" aria-hidden="true"></i> Kinda </span>
                 {% else -%}
                   <i class="fas fa-check" aria-hidden="true"></i> Yes
                 {% endif -%}
