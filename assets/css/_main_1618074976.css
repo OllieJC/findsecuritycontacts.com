@@ -1,0 +1,232 @@
+.mr-auto, .mx-auto {
+    margin-right: auto !important;
+}
+
+.form-inline .form-control {
+    display: inline-block;
+    width: auto;
+    vertical-align: middle;
+}
+
+#navbarCollapse.show #navDomain {
+    margin: 1em 0;
+}
+
+main > .container {
+  padding: 4em 1.5em 8em 1.5em;
+}
+
+.footer {
+  border-top: 0.25em solid #bbb;
+  background-color: #f5f5f5;
+}
+
+.footer > .container {
+  padding-right: 15px;
+  padding-left: 15px;
+  text-align: center;
+}
+
+code {
+  font-size: 80%;
+}
+
+.updated_at {
+  text-align: center;
+  font-size: 1.15em;
+  margin: 1.8em 0;
+}
+
+.bd-placeholder-img {
+  font-size: 1.125rem;
+  text-anchor: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+pre {
+  border-left: 0.5em solid #c8c8c8;
+  padding-left: 2em;
+}
+
+@media (min-width: 768px) {
+  .bd-placeholder-img-lg {
+    font-size: 3.5rem;
+  }
+}
+
+.validDiv {
+  text-align: center;
+}
+
+a:focus {
+  text-decoration: none;
+  background-color: #fd0;
+  color: black !important;
+  box-shadow: 0 -2px #fd0,0 4px #0b0c0c;
+}
+
+a,
+a:link,
+a:visited,
+a:hover,
+a:active,
+a:focus {
+  color: black;
+}
+a:hover {
+  text-decoration: none;
+}
+
+.btn-dark,
+.btn-dark:link,
+.btn-dark:visited,
+.btn-dark:hover,
+.btn-dark:active,
+.btn-dark:focus {
+  color: #fff;
+}
+.btn-dark:hover {
+  text-decoration: underline;
+}
+
+.back:link,
+.back:visited,
+.back:hover,
+.back:active,
+.back:focus {
+    color: #0b0c0c;
+}
+
+.back {
+  margin: 1em 0;
+  display: inline-block;
+  position: relative;
+  padding-left: 14px;
+}
+
+.back[href] {
+  text-decoration: underline;
+}
+
+.back::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 3px;
+  width: 7px;
+  height: 7px;
+  margin: auto 0;
+  -webkit-transform: rotate(225deg);
+  -ms-transform: rotate(225deg);
+  transform: rotate(225deg);
+  border: solid;
+  border-width: 2px 2px 0 0;
+  border-color: #505a5f;
+}
+
+.btn-cgrp .btn {
+  cursor: inherit;
+}
+
+.btn-cgrp {
+  width: 100%;
+  position: relative;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  vertical-align: middle;
+  padding: 2em 0;
+}
+
+.btn-cgrp .btn { border-radius: 0; width:100% }
+.btn-cgrp .btn:first-child {border-radius: 14px 0 0 14px}
+.btn-cgrp .btn:last-child {border-radius: 0 14px 14px 0}
+
+@media (max-width: 992px) {
+  .btn-cgrp { display: inline-table !important }
+  .btn-cgrp .btn:first-child {border-radius: 14px 14px 0 0}
+  .btn-cgrp .btn:last-child {border-radius: 0 0 14px 14px}
+  .hide_medium { display: none; }
+}
+
+@media (max-width: 576px) {
+  .btn-cgrp .btn{border-radius: 0 !important}
+  .hide_small { display: none; }
+}
+
+/* -- icons -- */
+@font-face {
+ font-family:"Font Awesome 5 Brands";
+ font-style:normal;
+ font-weight:400;
+ font-display:block;
+ src:url(../webfonts/fa-brands-400.eot);
+ src:url(../webfonts/fa-brands-400.eot?#iefix) format("embedded-opentype"),
+ url(../webfonts/fa-brands-400.woff2) format("woff2"),
+ url(../webfonts/fa-brands-400.woff) format("woff"),
+ url(../webfonts/fa-brands-400.ttf) format("truetype"),
+ url(../webfonts/fa-brands-400.svg#fontawesome) format("svg")
+}
+.fab {
+ font-family:"Font Awesome 5 Brands"
+}
+@font-face {
+ font-family:"Font Awesome 5 Free";
+ font-style:normal;
+ font-weight:400;
+ font-display:block;
+ src:url(../webfonts/fa-regular-400.eot);
+ src:url(../webfonts/fa-regular-400.eot?#iefix) format("embedded-opentype"),
+ url(../webfonts/fa-regular-400.woff2) format("woff2"),
+ url(../webfonts/fa-regular-400.woff) format("woff"),
+ url(../webfonts/fa-regular-400.ttf) format("truetype"),
+ url(../webfonts/fa-regular-400.svg#fontawesome) format("svg")
+}
+.fab,
+.far {
+  font-weight:400
+}
+@font-face {
+ font-family:"Font Awesome 5 Free";
+ font-style:normal;
+ font-weight:900;
+ font-display:block;
+ src:url(../webfonts/fa-solid-900.eot);
+ src:url(../webfonts/fa-solid-900.eot?#iefix) format("embedded-opentype"),
+ url(../webfonts/fa-solid-900.woff2) format("woff2"),
+ url(../webfonts/fa-solid-900.woff) format("woff"),
+ url(../webfonts/fa-solid-900.ttf) format("truetype"),
+ url(../webfonts/fa-solid-900.svg#fontawesome) format("svg")
+}
+.fa, .fas {
+  font-weight: 900;
+}
+.fa, .far, .fas {
+  font-family: "Font Awesome 5 Free";
+}
+.fa, .fab, .fad, .fal, .far, .fas {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  line-height: 1;
+}
+.fa-github:before {
+  content: "\f09b"; }
+.fa-twitter:before {
+  content: "\f099"; }
+.fa-check:before {
+  content: "\f00c"; }
+.fa-times:before {
+  content: "\f00d"; }
+.fa-lock-open:before {
+  content: "\f3c1"; }
+.fa-lock:before {
+  content: "\f023"; }
+.fa-info-circle:before {
+  content: "\f05a"; }

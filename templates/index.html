@@ -17,11 +17,9 @@
     <p>You can find more about the security.txt file and the RFC status on <a href="https://securitytxt.org">securitytxt.org</a></p>
   </div>
 
-  <div>
-    <a href="/{{ country_short_code }}{{ '' if only_valid else '-only-valid' }}">
-      <span class="btn">
-        {{ 'Show all top sites' if only_valid else 'Show only top sites with a valid looking security.txt' }}
-      </span>
+  <div class="validDiv">
+    <a class="btn btn-dark btn-sm" href="/{{ country_short_code }}{{ '' if only_valid else '-only-valid' }}" role="button">
+      {{ 'Show all top sites' if only_valid else 'Show only top sites with a valid looking security.txt' }}
     </a>
   </div>
 
