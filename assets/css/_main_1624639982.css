@@ -8,6 +8,10 @@
     vertical-align: middle;
 }
 
+h1 {
+    text-align: center;
+}
+
 #navbarCollapse.show #navDomain {
     margin: 1em 0;
 }
