@@ -73,6 +73,8 @@ def genStaticFiles(results: list, us_domains_list: list, gb_domains_list: list):
         ["index.html", "valid top sites in Great Britain", ["gb-only-valid"]],
         ["pending.html", "scanning"],
         ["gen-error.html", "error"],
+        ["404.html", "not found"],
+        ["error.html", "error"],
         ["query.html", "query", ["query", "query.html"]],
         ["security.txt", "", ["security.txt", ".well-known/security.txt"]],
         ["site.webmanifest", "", ["site.webmanifest", "manifest.json"]],
