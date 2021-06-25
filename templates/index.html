@@ -1,6 +1,9 @@
 {% extends "_primary.html" %}
 {% block content %}
 <div>
+	
+  <h1>gotsecuritytxt.com</h1>
+
   <div>
     <div class="btn-cgrp" role="group">
       <span class="btn alert-info">Top {{ total }} sites in {{ country }}</span>
@@ -11,10 +14,11 @@
   </div>
 
   <div>
+    <h2>What is a security.txt file?</h2>
     <p>A security.txt file is a way for websites to show how security researchers can get in contact and whether there is any bug bountry or vulnerability disclosure policy.</p>
-    <p>This website scans the top {{ total }} sites daily (you are viewing top sites in {{ country }} currently) for their security.txt file and parses it.<br>
+    <p><strong>gotsecuritytxt.com</strong> scans the top {{ total }} sites daily (you are viewing top sites in {{ country }} currently) for their security.txt file and parses it.<br>
 	    You can also <a href="/query">query</a> any website to see if there is a security.txt file and whether it appears to be formatted correctly.</p>
-    <p>You can find more about the security.txt file and the RFC status on <a href="https://securitytxt.org">securitytxt.org</a></p>
+    <p>You can find more about the <strong>security.txt</strong> file and the RFC status on <a href="https://securitytxt.org">securitytxt.org</a></p>
   </div>
 
   <div class="validDiv">
@@ -91,6 +95,6 @@
   </table>
 </div>
 <div class="updated_at">
-  Updated at: {{ updated_at }}
+  gotsecuritytxt.com last did a crawl for security.txt files on the top sites at: {{ updated_at }}
 </div>
 {% endblock %}

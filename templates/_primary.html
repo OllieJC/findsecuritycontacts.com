@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" xml:lang="en" class="h-100">
   <head>
-    <title>{{ (title + " - ") if title else '' }}gotsecuritytxt.com</title>
+    <title>gotsecuritytxt.com{{ (" - " + title) if title else '' }}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="{{ description }}">
@@ -16,7 +16,7 @@
     <meta name="theme-color" content="#7952b3">
     <link rel="manifest" href="/site.webmanifest">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-    <link href="/assets/css/_main_1618074976.css" rel="stylesheet" integrity="{{ main_css_hash }}" crossorigin="anonymous">
+    <link href="/assets/css/_main_1624639982.css" rel="stylesheet" integrity="{{ main_css_hash }}" crossorigin="anonymous">
     {% block head %}{% endblock %}
   </head>
   <body class="d-flex flex-column h-100">
