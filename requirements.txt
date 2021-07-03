@@ -1,5 +1,5 @@
-jinja2
-subresource-integrity
-requests
-boto3
-pytz
+Jinja2>=3.0
+subresource-integrity==0.2
+requests>=2.25
+boto3>=1.17
+pytz==2021.1
