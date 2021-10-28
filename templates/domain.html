@@ -17,10 +17,10 @@
 
   {% if res["sectxt_type"] -%}
     <p>Scheme:
-      {% if res["sectxt_type"] == 3 or res["sectxt_type"] == 4 -%}
-        http <i class="fas fa-lock-open" aria-hidden="true"></i>
-      {% elif res["sectxt_type"] == 1 or res["sectxt_type"] == 2 -%}
+      {% if res["valid_https"] -%}
         https <i class="fas fa-lock" aria-hidden="true"></i>
+      {% else -%}
+        http <i class="fas fa-lock-open" aria-hidden="true"></i>
       {% endif -%}
     </p>
   {% endif -%}
@@ -62,6 +62,19 @@
 
   {% if res["full_text"] -%}
     <p>Full version: <pre>{{ res["full_text"] }}</pre></p>
+  {% endif -%}
+
+  {% if res["redirects"] -%}
+    {% if res["redirects"]|length > 1 -%}
+      <div>
+        <p>Redirects:</p>
+        <ul>
+        {% for x in res["redirects"] %}
+          <li>{{ x["type"] }}: {{ x["val"] }}</li>
+        {% endfor %}
+        </ul>
+      </div>
+    {% endif -%}
   {% endif -%}
 
   <div class="updated_at">

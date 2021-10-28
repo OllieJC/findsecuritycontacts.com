@@ -1,7 +1,10 @@
 SHELL := /usr/bin/env bash
 DEFAULT_GOAL := test
 PHONY = clean
-ONESHELL:
+# ONESHELL:
+
+test:
+	echo "Not implemented"
 
 build-lambda:
 	mkdir -p .build/
