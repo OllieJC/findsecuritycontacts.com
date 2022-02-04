@@ -17,14 +17,8 @@ redirect_value = (
     + "http-equiv\s*?=\s*?['\"]?refresh.*?content\s*?=\s*?)"
     + "['\"](?:.*?\;)?(?:\s+)?(?:url\s*?=\s*?)?(?P<redirect>.+?)['\"]"
 )
-connect_timeout = read_timeout = 3.05
-retry_strategy = Retry(
-    total=2,
-    backoff_factor=0.5,
-    status_forcelist=[429, 500, 502, 503, 504],
-    method_whitelist=["HEAD", "GET", "OPTIONS"]
-)
-adapter = HTTPAdapter(max_retries=retry_strategy)
+timeout=1
+adapter = HTTPAdapter(max_retries=1)
 http = requests.Session()
 http.mount("https://", adapter)
 http.mount("http://", adapter)
@@ -86,7 +80,7 @@ def getSecurityTxtFormat(domain: str, uf: str):
     try:
         headers = {"User-Agent": "python requests - gotsecuritytxt.com"}
         req = http.get(
-            uf.format(domain), headers=headers, verify=True, timeout=(connect_timeout, read_timeout)
+            uf.format(domain), headers=headers, verify=True, timeout=timeout
         )
         redirects = getRedirectsFromReq(req)
 
@@ -107,7 +101,7 @@ def getSecurityTxtFormat(domain: str, uf: str):
                             possible_redirect,
                             headers=headers,
                             verify=True,
-                            timeout=(connect_timeout, read_timeout),
+                            timeout=timeout,
                         )
                         pr2 = parseResponse(
                             req2.headers, req2.text, domain, req2.url, req2.status_code
