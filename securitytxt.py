@@ -3,6 +3,8 @@ import time
 import html
 import re
 
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 
 url_formats = {
     1: "https://{0}/.well-known/security.txt",
@@ -15,17 +17,41 @@ redirect_value = (
     + "http-equiv\s*?=\s*?['\"]?refresh.*?content\s*?=\s*?)"
     + "['\"](?:.*?\;)?(?:\s+)?(?:url\s*?=\s*?)?(?P<redirect>.+?)['\"]"
 )
-request_timeout = 2
+connect_timeout = 0.1
+read_timeout = 3
+retry_strategy = Retry(
+    total=3,
+    backoff_factor=0.5,
+    status_forcelist=[429, 500, 502, 503, 504],
+    method_whitelist=["HEAD", "GET", "OPTIONS"]
+)
+adapter = HTTPAdapter(max_retries=retry_strategy)
+http = requests.Session()
+http.mount("https://", adapter)
+http.mount("http://", adapter)
 
 
 def getSecurityTxt(domain: str):
+    https_error = False
+    http_error = False
+    
+    res = None
+    
     for x in url_formats:
-        res = getSecurityTxtFormat(domain, url_formats[x])
-        if res["has_contact"]:
-            res.update({"sectxt_type": x})
-            return res
+        if not https_error and not http_error:
+            res = getSecurityTxtFormat(domain, url_formats[x])
 
-    return parseResponse({}, "", domain, "", 404)
+            if "error" in res and url_formats[x].startswith("https:"):
+                https_error = True
+
+            if "error" in res and url_formats[x].startswith("http:"):
+                http_error = True
+
+            if res["has_contact"]:
+                res.update({"sectxt_type": x})
+                break
+
+    return res
 
 
 def getRedirectsFromReq(req, is_html_redirect=False):
@@ -56,14 +82,14 @@ def onlyHTTPSInRedirects(redirects):
 
 
 def getSecurityTxtFormat(domain: str, uf: str):
+    errorString = None
+    
     try:
         headers = {"User-Agent": "python requests - gotsecuritytxt.com"}
-        req = requests.get(
-            uf.format(domain), headers=headers, verify=True, timeout=request_timeout
+        req = http.get(
+            uf.format(domain), headers=headers, verify=True, timeout=(connect_timeout, read_timeout)
         )
         redirects = getRedirectsFromReq(req)
-        # print("----")
-        # print(req.headers, req.text, domain, req.url, req.status_code)
 
         pr = parseResponse(req.headers, req.text, domain, req.url, req.status_code)
 
@@ -76,29 +102,40 @@ def getSecurityTxtFormat(domain: str, uf: str):
                         possible_redirect = "{0}://{1}{2}".format(
                             uf.split(":")[0], domain, possible_redirect
                         )
+                    
+                    if "://" in possible_redirect:
+                        req2 = http.get(
+                            possible_redirect,
+                            headers=headers,
+                            verify=True,
+                            timeout=(connect_timeout, read_timeout),
+                        )
+                        pr2 = parseResponse(
+                            req2.headers, req2.text, domain, req2.url, req2.status_code
+                        )
 
-                    req2 = requests.get(
-                        possible_redirect,
-                        headers=headers,
-                        verify=True,
-                        timeout=request_timeout,
-                    )
-                    pr2 = parseResponse(
-                        req2.headers, req2.text, domain, req2.url, req2.status_code
-                    )
-
-                    if pr2["has_contact"]:
-                        redirects = redirects + getRedirectsFromReq(req2, True)
-                        pr2["redirects"] = redirects
-                        pr2["valid_https"] = onlyHTTPSInRedirects(redirects)
-                        return pr2
+                        if pr2["has_contact"]:
+                            redirects = redirects + getRedirectsFromReq(req2, True)
+                            pr2["redirects"] = redirects
+                            pr2["valid_https"] = onlyHTTPSInRedirects(redirects)
+                            return pr2
 
         pr["redirects"] = redirects
         pr["valid_https"] = onlyHTTPSInRedirects(redirects)
         return pr
+    except requests.exceptions.SSLError as e:
+        errorString = "TLS/SSL error"
+    except requests.exceptions.RetryError as e:
+        errorString = "Retry error"
+    except requests.exceptions.Timeout as e:
+        errorString = "Timeout error"
     except Exception as e:
-        print("getSecurityTxtFormat:error:", e)
-        return parseResponse({}, "", domain, "", 404)
+        errorString = str(e)
+        
+    print("getSecurityTxtFormat:error:", errorString)
+    pr = parseResponse({}, "", domain, "", 404)
+    pr["error"] = errorString
+    return pr
 
 
 def parseResponse(headers: dict, body: str, domain: str, url: str, status_code: int):
