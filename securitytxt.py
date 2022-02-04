@@ -17,10 +17,9 @@ redirect_value = (
     + "http-equiv\s*?=\s*?['\"]?refresh.*?content\s*?=\s*?)"
     + "['\"](?:.*?\;)?(?:\s+)?(?:url\s*?=\s*?)?(?P<redirect>.+?)['\"]"
 )
-connect_timeout = 0.1
-read_timeout = 3
+connect_timeout = read_timeout = 3.05
 retry_strategy = Retry(
-    total=3,
+    total=2,
     backoff_factor=0.5,
     status_forcelist=[429, 500, 502, 503, 504],
     method_whitelist=["HEAD", "GET", "OPTIONS"]
