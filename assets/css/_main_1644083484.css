@@ -12,6 +12,10 @@ h1 {
     text-align: center;
 }
 
+h3 {
+  margin-top: 4rem;
+}
+
 #navbarCollapse.show #navDomain {
     margin: 1em 0;
 }

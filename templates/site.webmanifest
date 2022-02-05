@@ -1,6 +1,6 @@
 {
-  "short_name": "gotsecuritytxt.com",
-  "name": "gotsecuritytxt.com - do top sites have a security.txt file?",
+  "short_name": "findsecuritycontacts.com",
+  "name": "findsecuritycontacts.com - do top sites have a security.txt file or DNS security record?",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
@@ -22,25 +22,25 @@
     {
       "name": "Check top sites in United States",
       "short_name": "United States",
-      "description": "See if top sites in United States have a security.txt file",
+      "description": "See if top sites in United States have a security.txt file or DNS security record",
       "url": "/us",
       "icons": []
     },
     {
       "name": "Check top sites in Great Britain",
       "short_name": "Great Britain",
-      "description": "See if top sites in Great Britain have a security.txt file",
+      "description": "See if top sites in Great Britain have a security.txt file or DNS security record",
       "url": "/gb",
       "icons": []
     },
     {
       "name": "Query a sit",
       "short_name": "Query",
-      "description": "Query a site for its security.txt file",
+      "description": "Query a site for its security.txt file or DNS security record",
       "url": "/query",
       "icons": []
     }
   ],
-  "description": "Top sites security.txt file status and query tool",
+  "description": "Top sites security.txt file and DNS security record status and query tool",
   "screenshots": []
 }

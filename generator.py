@@ -1,17 +1,21 @@
-from jinja_helper import renderTemplate
-from securitytxt import getSecurityTxt
-from multiprocessing import Pool
 import shutil
 import json
 import os
-import ats
 import re
 import sys
+
+import ats
+
+from multiprocessing import Pool
+
+from jinja_helper import renderTemplate
+from target import scan
 
 
 dist: str = "dist/"
 top_sites: str = "dist/top/"
 gen_sites: str = "dist/gen/"
+api: str = "dist/api/"
 well_known: str = "dist/.well-known"
 
 
@@ -24,6 +28,7 @@ def setupDist():
     os.mkdir(dist)
     os.mkdir(top_sites)
     os.mkdir(gen_sites)
+    os.mkdir(api)
     os.mkdir(well_known)
 
     shutil.copytree("assets", f"{dist}assets", dirs_exist_ok=True)
@@ -32,10 +37,15 @@ def setupDist():
 def genSecurityTxtForDomain(
     x: str, topOrGen: str = top_sites, return_body: bool = False
 ) -> dict:
-    print(f"Attempting to get security.txt for {x}")
-    details = getSecurityTxt(x)
-
-    result = renderTemplate("domain.html", {"res": details, "dest_domain": x})
+    details = scan(x)
+    result = renderTemplate(
+        "domain.html",
+        {
+            # "res_json": json.dumps(details, default=str, indent=2),
+            "res": details,
+            "dest_domain": details["target"] if "target" in details else "",
+        },
+    )
 
     if return_body:
         return result
@@ -66,6 +76,14 @@ def genStaticFiles(results: list, us_domains_list: list, gb_domains_list: list):
                 y.update({"top_index": srd["rank"]})
                 gb_results.append(y)
 
+    f = open(f"{dist}api/us.json", "w")
+    json.dump(us_results, f, indent=2)
+    f.close()
+
+    f = open(f"{dist}api/gb.json", "w")
+    json.dump(gb_results, f, indent=2)
+    f.close()
+
     for x in [
         ["index.html", "top sites in United States", ["index.html", "us", "us.html"]],
         ["index.html", "valid top sites in United States", ["us-only-valid"]],
@@ -87,7 +105,19 @@ def genStaticFiles(results: list, us_domains_list: list, gb_domains_list: list):
 
             if "us" in x[2] or "us-only-valid" in x[2]:
                 total = len(us_results)
-                has_contacts = sum(1 for x in us_results if x["has_contact"])
+                has_contacts = sum(
+                    1
+                    for x in us_results
+                    if (
+                        "dnssecuritytxt" in x
+                        and x["dnssecuritytxt"]["matching_domain"] is not None
+                    )
+                    or (
+                        "http_security_txt" in x
+                        and "has_contact" in x["http_security_txt"]
+                        and x["http_security_txt"]["has_contact"]
+                    )
+                )
                 no_contacts = total - has_contacts
                 params = {
                     "country": "United States",
@@ -102,7 +132,19 @@ def genStaticFiles(results: list, us_domains_list: list, gb_domains_list: list):
 
             if "gb" in x[2] or "gb-only-valid" in x[2]:
                 total = len(gb_results)
-                has_contacts = sum(1 for x in gb_results if x["has_contact"])
+                has_contacts = sum(
+                    1
+                    for x in gb_results
+                    if (
+                        "dnssecuritytxt" in x
+                        and x["dnssecuritytxt"]["matching_domain"] is not None
+                    )
+                    or (
+                        "http_security_txt" in x
+                        and "has_contact" in x["http_security_txt"]
+                        and x["http_security_txt"]["has_contact"]
+                    )
+                )
                 no_contacts = total - has_contacts
                 params = {
                     "country": "Great Britain",
@@ -150,8 +192,8 @@ if __name__ == "__main__":
         gb_domains_list = []
 
         if os.environ.get("GET_SEC_TXT", "false") == "true":
-            us_domains_list = ats.getSites(250, "US")
-            gb_domains_list = ats.getSites(250, "GB")
+            us_domains_list = ats.getSites(10, "US")
+            gb_domains_list = ats.getSites(10, "GB")
 
             domain_list = set()
 

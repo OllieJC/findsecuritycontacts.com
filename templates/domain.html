@@ -1,13 +1,28 @@
 {% extends "_primary.html" %}
 {% block content %}
   <a href="/" class="back">Home</a>
-  <h2>{{ res["domain"] }}</h2>
+  <h2>{{ res["target"] }}</h2>
   <p>Scanned: {{ updated_at }}</p>
 
-  <p>Status: {{ res["status_code"] }}</p>
-  {% if res["content_type"] -%}
-    <p>Content type: {{ res["content_type"] }}
-      {% if res["valid_content_type"] -%}
+  {% if "scan_type" in res and res["scan_type"] == "domain" -%}
+    <h3>dnssecuritytxt (DNS)</h3>
+    <p>You can find out more about <a href="https://dnssecuritytxt.org/" target="_blank">dnssecuritytxt here</a>.</p>
+    {% if "dnssecuritytxt" in res and res["dnssecuritytxt"]["matching_domain"] -%}
+      <p>Domain: {{ res["dnssecuritytxt"]["matching_domain"] }}</p>
+      <p>Contact: {{ makeLink(res["dnssecuritytxt"]["security_contact"])|safe }}</p>
+      <p>Policy: {{ makeLink(res["dnssecuritytxt"]["security_policy"])|safe }}</p>
+    {% else %}
+      <p>No DNS records found</p>
+    {% endif %}
+  {% endif %}
+
+  <h3>security.txt (HTTP)</h3>
+  <p>You can find out more about <a href="https://securitytxt.org/" target="_blank">security.txt here</a>.</p>
+
+  <p>{{ "Status: " + (res["http_security_txt"]["status_code"]|string) if "http_security_txt" in res and "status_code" in res["http_security_txt"] else "No security.txt file found" }}</p>
+  {% if "http_security_txt" in res and "headers" in res["http_security_txt"] and "Content-Type" in res["http_security_txt"]["headers"] -%}
+    <p>Content type: {{ res["http_security_txt"]["headers"]["Content-Type"] }}
+      {% if res["http_security_txt"]["valid_content_type"] -%}
         <i class="fas fa-check" aria-hidden="true"></i>
       {% else -%}
         <i class="fas fa-times" aria-hidden="true"></i> (should be <i>text/plain</i>)
@@ -15,9 +30,9 @@
     </p>
   {% endif -%}
 
-  {% if res["sectxt_type"] -%}
+  {% if "http_security_txt" in res and "valid_https" in res["http_security_txt"] -%}
     <p>Scheme:
-      {% if res["valid_https"] -%}
+      {% if res["http_security_txt"]["valid_https"] -%}
         https <i class="fas fa-lock" aria-hidden="true"></i>
       {% else -%}
         http <i class="fas fa-lock-open" aria-hidden="true"></i>
@@ -25,57 +40,57 @@
     </p>
   {% endif -%}
 
-  {% if res["has_contact"] -%}
-    <p>URL: {{ makeLink(res["url"])|safe }}</p>
-  {% endif -%}
-
-  <p>
-    Has a contact: {{ pb(res["has_contact"]) }}
-  {% if res["has_contact"] -%}
-    <i class="fas fa-check" aria-hidden="true"></i>
-    </p>
-    <div>
-      <p>Contacts:</p>
-      <ul>
-        {% for x in res["items"]["Contact"] %}
-          <li>{{ makeLink(x)|safe }}</li>
-        {% endfor %}
-      </ul>
-    </div>
-
-    {% if res["items"]["Policy"]|length > 0 -%}
+  {% if "http_security_txt" in res and "has_contact" in res["http_security_txt"] -%}
+    <p>URL: {{ makeLink(res["http_security_txt"]["url"])|safe }}</p>
+    <p>
+      Has a contact: {{ pb(res["http_security_txt"]["has_contact"]) }}
+    {% if res["http_security_txt"]["has_contact"] -%}
+      <i class="fas fa-check" aria-hidden="true"></i>
+      </p>
       <div>
-        <p>Policy:</p>
+        <p>Contacts:</p>
         <ul>
-          {% for x in res["items"]["Policy"] %}
+          {% for x in res["http_security_txt"]["items"]["Contact"] %}
             <li>{{ makeLink(x)|safe }}</li>
           {% endfor %}
         </ul>
       </div>
+
+      {% if res["http_security_txt"]["items"]["Policy"]|length > 0 -%}
+        <div>
+          <p>Policy:</p>
+          <ul>
+            {% for x in res["http_security_txt"]["items"]["Policy"] %}
+              <li>{{ makeLink(x)|safe }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif -%}
+
+      <p>Minimal version: <pre>{{ res["http_security_txt"]["min_text"] }}</pre></p>
+    {% else -%}
+      <i class="fas fa-times" aria-hidden="true"></i>
+      </p>
     {% endif -%}
 
-    <p>Minimal version: <pre>{{ res["min_text"] }}</pre></p>
-  {% else -%}
-    <i class="fas fa-times" aria-hidden="true"></i>
-    </p>
-  {% endif -%}
+    {% if res["http_security_txt"]["full_text"] -%}
+      <p>Full version: <pre>{{ res["http_security_txt"]["full_text"] }}</pre></p>
+    {% endif -%}
 
-  {% if res["full_text"] -%}
-    <p>Full version: <pre>{{ res["full_text"] }}</pre></p>
-  {% endif -%}
-
-  {% if res["redirects"] -%}
-    {% if res["redirects"]|length > 1 -%}
-      <div>
-        <p>Redirects:</p>
-        <ul>
-        {% for x in res["redirects"] %}
-          <li>{{ x["type"] }}: {{ x["val"] }}</li>
-        {% endfor %}
-        </ul>
-      </div>
+    {% if res["http_security_txt"]["redirects"] -%}
+      {% if res["http_security_txt"]["redirects"]|length > 1 -%}
+        <div>
+          <p>Redirects:</p>
+          <ul>
+          {% for x in res["http_security_txt"]["redirects"] %}
+            <li>{{ x["type"] }}: {{ x["val"] }}</li>
+          {% endfor %}
+          </ul>
+        </div>
+      {% endif -%}
     {% endif -%}
   {% endif -%}
+
 
   <div class="updated_at">
     Updated at: {{ updated_at }}

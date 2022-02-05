@@ -7,12 +7,12 @@ def lambda_handler(event, context):
     if "domain" in event:
         domain = event["domain"]
 
-        if "://" not in domain:
-            domain = f"http://{domain}"
+        if not (domain.startswith("https://") or domain.startswith("http://")):
+            domain = f"null://{domain}"
         domain = urlparse(domain).hostname
 
         if domain:
-            body = generator.genSecurityTxtForDomain(domain, return_body=True)
+            body = generator.genSecurityTxtForDomain(event["domain"], return_body=True)
             if body:
                 bucket = "gotsecuritytxt.com"
                 key = f"gen/{domain}"

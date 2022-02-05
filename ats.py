@@ -68,11 +68,11 @@ def getSitesWithStart(start, count, cc) -> list:
 
 def getSites(count=100, cc="US"):
 
-    # check for s3://gotsecuritytxt.com/ats/{cc}/{count}-sites.json
+    # check for s3://gotsecuritytxt.com/api/ats/{cc}/{count}-sites.json
     # if sites is less than one month old, use that, else, get/set an updated list
 
     bucket = "gotsecuritytxt.com"
-    key = f"ats/{cc}/{count}-sites.json"
+    key = f"api/ats/{cc}/{count}-sites.json"
     past = utc.localize(datetime.now() - timedelta(days=30))
 
     valid = False

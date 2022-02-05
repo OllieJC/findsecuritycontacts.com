@@ -67,7 +67,7 @@ def getOrSetAssetSRI(filename: str) -> str:
 
 
 def renderTemplate(
-    filename: str, params: dict = {}, domain: str = "gotsecuritytxt.com"
+    filename: str, params: dict = {}, domain: str = "findsecuritycontacts.com"
 ) -> str:
     params.update({"filename": filename})
     params.update({"updated_at": time.strftime("%H:%M:%S%z on %d %B %Y")})
@@ -98,7 +98,7 @@ def renderTemplate(
     for x in [
         ["bs_min_css_hash", "assets/css/bootstrap.min.css"],
         ["bs_table_css_hash", "assets/css/bootstrap-table.min.css"],
-        ["main_css_hash", "assets/css/_main_1624639982.css"],
+        ["main_css_hash", "assets/css/_main_1644083484.css"],
         ["font_awesome_css_hash", "assets/css/all.min.css"],
         # ["jq_js_hash", "assets/js/jquery.min.js"],
         # ["bsb_js_hash", "assets/js/bootstrap.bundle.min.js"],
