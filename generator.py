@@ -62,19 +62,20 @@ def genStaticFiles(results: list, us_domains_list: list, gb_domains_list: list):
     gb_results = []
 
     for r in results:
-        for x in us_domains_list:
-            srd = splitRankedDomain(x)
-            if r["domain"] == srd["domain"]:
-                y = dict(r)
-                y.update({"top_index": srd["rank"]})
-                us_results.append(y)
+        if "target" in r:
+            for x in us_domains_list:
+                srd = splitRankedDomain(x)
+                if r["target"] == srd["domain"]:
+                    y = dict(r)
+                    y.update({"top_index": srd["rank"]})
+                    us_results.append(y)
 
-        for x in gb_domains_list:
-            srd = splitRankedDomain(x)
-            if r["domain"] == srd["domain"]:
-                y = dict(r)
-                y.update({"top_index": srd["rank"]})
-                gb_results.append(y)
+            for x in gb_domains_list:
+                srd = splitRankedDomain(x)
+                if r["target"] == srd["domain"]:
+                    y = dict(r)
+                    y.update({"top_index": srd["rank"]})
+                    gb_results.append(y)
 
     f = open(f"{dist}api/us.json", "w")
     json.dump(us_results, f, indent=2)
@@ -192,8 +193,8 @@ if __name__ == "__main__":
         gb_domains_list = []
 
         if os.environ.get("GET_SEC_TXT", "false") == "true":
-            us_domains_list = ats.getSites(10, "US")
-            gb_domains_list = ats.getSites(10, "GB")
+            us_domains_list = ats.getSites(250, "US")
+            gb_domains_list = ats.getSites(250, "GB")
 
             domain_list = set()
 
