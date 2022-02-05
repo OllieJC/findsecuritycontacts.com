@@ -56,26 +56,19 @@ def genSecurityTxtForDomain(
         return details
 
 
-def genStaticFiles(results: list, us_domains_list: list, gb_domains_list: list):
+def genStaticFiles(results: list, us_domains_dict: dict, gb_domains_dict: dict):
 
     us_results = []
     gb_results = []
 
     for r in results:
-        if "target" in r:
-            for x in us_domains_list:
-                srd = splitRankedDomain(x)
-                if r["target"] == srd["domain"]:
-                    y = dict(r)
-                    y.update({"top_index": srd["rank"]})
-                    us_results.append(y)
+        if "target" in r and r["target"] in us_domains_dict:
+            r["top_index"] = us_domains_dict[r["target"]]
+            us_results.append(r)
 
-            for x in gb_domains_list:
-                srd = splitRankedDomain(x)
-                if r["target"] == srd["domain"]:
-                    y = dict(r)
-                    y.update({"top_index": srd["rank"]})
-                    gb_results.append(y)
+        if "target" in r and r["target"] in gb_domains_dict:
+            r["top_index"] = gb_domains_dict[r["target"]]
+            gb_results.append(r)
 
     f = open(f"{dist}api/us.json", "w")
     json.dump(us_results, f, indent=2)
@@ -192,6 +185,9 @@ if __name__ == "__main__":
         us_domains_list = []
         gb_domains_list = []
 
+        us_domains_dict = {}
+        gb_domains_dict = {}
+
         if os.environ.get("GET_SEC_TXT", "false") == "true":
             us_domains_list = ats.getSites(250, "US")
             gb_domains_list = ats.getSites(250, "GB")
@@ -201,20 +197,22 @@ if __name__ == "__main__":
             for x in us_domains_list:
                 srd = splitRankedDomain(x)
                 domain_list.add(srd["domain"])
+                us_domains_dict[srd["domain"]] = srd["rank"]
 
             for x in gb_domains_list:
                 srd = splitRankedDomain(x)
                 domain_list.add(srd["domain"])
+                gb_domains_dict[srd["domain"]] = srd["rank"]
 
             if len(domain_list) > 0:
                 print("Got domain lists, counts:")
                 print("Total -", len(domain_list))
-                print("US -", len(us_domains_list))
-                print("GB -", len(gb_domains_list))
+                print("US -", len(us_domains_dict))
+                print("GB -", len(gb_domains_dict))
             else:
                 raise Exception("No domains")
 
             with Pool(int(os.environ.get("POOL_SIZE", "15"))) as p:
                 results = p.map(genSecurityTxtForDomain, domain_list)
 
-        genStaticFiles(results, us_domains_list, gb_domains_list)
+        genStaticFiles(results, us_domains_dict, gb_domains_dict)
