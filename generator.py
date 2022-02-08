@@ -4,12 +4,13 @@ import os
 import re
 import sys
 
-import ats
+import sites
 
 from multiprocessing import Pool
 
 from jinja_helper import renderTemplate
 from target import scan
+from json_logger import log
 
 
 dist: str = "dist/"
@@ -35,9 +36,16 @@ def setupDist():
 
 
 def genSecurityTxtForDomain(
-    x: str, topOrGen: str = top_sites, return_body: bool = False
+    x: tuple, topOrGen: str = top_sites, return_body: bool = False
 ) -> dict:
-    details = scan(x)
+
+    details = {}
+    try:
+        details = scan(x[1])
+    except Exception as e:
+        log(x[1], e)
+    details.update({"rank": x[0]})
+
     result = renderTemplate(
         "domain.html",
         {
@@ -50,39 +58,59 @@ def genSecurityTxtForDomain(
     if return_body:
         return result
     else:
-        f = open(f"{topOrGen}{x}", "w")
-        f.write(result)
-        f.close()
-        return details
+        try:
+            f = open(f"{topOrGen}{x[1]}", "w", encoding="utf-8")
+            f.write(result)
+            f.close()
+        except Exception as e:
+            log(x[1], e)
+
+        if "target" in details:
+            res_dict = {
+                details["target"]: {
+                    "rank": details["rank"],
+                    "has_contact": details["has_contact"],
+                    "has_dns_contact": True
+                    if "dnssecuritytxt" in details
+                    and details["dnssecuritytxt"]["security_contact"] is not None
+                    else False,
+                }
+            }
+            if "http_security_txt" in details and details["http_security_txt"] != {}:
+                res_dict[details["target"]].update(
+                    {
+                        "status_code": details["http_security_txt"]["status_code"],
+                        "http_valid_https": details["http_security_txt"]["valid_https"],
+                        "http_valid_content_type": details["http_security_txt"][
+                            "valid_content_type"
+                        ],
+                        "has_http_contact": True,
+                        "has_http_type": details["http_security_txt"]["type"],
+                    }
+                )
+            else:
+                res_dict[details["target"]].update(
+                    {
+                        "status_code": 0,
+                        "http_valid_https": False,
+                        "http_valid_content_type": False,
+                        "has_http_contact": False,
+                        "has_http_type": None,
+                    }
+                )
+            return res_dict
+        else:
+            return {}
 
 
-def genStaticFiles(results: list, us_domains_dict: dict, gb_domains_dict: dict):
-
-    us_results = []
-    gb_results = []
-
-    for r in results:
-        if "target" in r and r["target"] in us_domains_dict:
-            r["top_index"] = us_domains_dict[r["target"]]
-            us_results.append(r)
-
-        if "target" in r and r["target"] in gb_domains_dict:
-            r["top_index"] = gb_domains_dict[r["target"]]
-            gb_results.append(r)
-
-    f = open(f"{dist}api/us.json", "w")
-    json.dump(us_results, f, indent=2)
-    f.close()
-
-    f = open(f"{dist}api/gb.json", "w")
-    json.dump(gb_results, f, indent=2)
+def genStaticFiles(results: dict):
+    f = open(f"{dist}api/top{len(results)}.json", "w", encoding="utf-8")
+    json.dump(results, f, indent=2)
     f.close()
 
     for x in [
-        ["index.html", "top sites in United States", ["index.html", "us", "us.html"]],
-        ["index.html", "valid top sites in United States", ["us-only-valid"]],
-        ["index.html", "top sites in Great Britain", ["gb", "gb.html"]],
-        ["index.html", "valid top sites in Great Britain", ["gb-only-valid"]],
+        ["index.html", "top sites", ["index.html"]],
+        ["index.html", "valid top sites", ["only-valid"]],
         ["pending.html", "scanning"],
         ["gen-error.html", "error"],
         ["404.html", "not found"],
@@ -94,62 +122,30 @@ def genStaticFiles(results: list, us_domains_dict: dict, gb_domains_dict: dict):
     ]:
         params = {}
         if x[0] == "index.html":
-            if len(results) == 0:
+            lenres = len(results)
+            if lenres == 0:
                 continue
 
-            if "us" in x[2] or "us-only-valid" in x[2]:
-                total = len(us_results)
-                has_contacts = sum(
-                    1
-                    for x in us_results
-                    if (
-                        "dnssecuritytxt" in x
-                        and x["dnssecuritytxt"]["matching_domain"] is not None
-                    )
-                    or (
-                        "http_security_txt" in x
-                        and "has_contact" in x["http_security_txt"]
-                        and x["http_security_txt"]["has_contact"]
-                    )
-                )
-                no_contacts = total - has_contacts
-                params = {
-                    "country": "United States",
-                    "results": us_results,
-                    "total": total,
-                    "has_contacts": has_contacts,
-                    "no_contacts": no_contacts,
-                    "country_short_code": "us",
+            has_contacts = 0
+            norm_results = {}
+            for result in results:
+                norm_results[results[result]["rank"]] = {
+                    **{"target": result},
+                    **results[result],
                 }
-                if "us-only-valid" in x[2]:
-                    params["only_valid"] = True
-
-            if "gb" in x[2] or "gb-only-valid" in x[2]:
-                total = len(gb_results)
-                has_contacts = sum(
-                    1
-                    for x in gb_results
-                    if (
-                        "dnssecuritytxt" in x
-                        and x["dnssecuritytxt"]["matching_domain"] is not None
-                    )
-                    or (
-                        "http_security_txt" in x
-                        and "has_contact" in x["http_security_txt"]
-                        and x["http_security_txt"]["has_contact"]
-                    )
-                )
-                no_contacts = total - has_contacts
-                params = {
-                    "country": "Great Britain",
-                    "results": gb_results,
-                    "total": total,
-                    "has_contacts": has_contacts,
-                    "no_contacts": no_contacts,
-                    "country_short_code": "gb",
-                }
-                if "gb-only-valid" in x[2]:
-                    params["only_valid"] = True
+                if results[result]["has_contact"]:
+                    has_contacts += 1
+            no_contacts = lenres - has_contacts
+            params = {
+                "country": "...",
+                "results": norm_results,
+                "total": lenres,
+                "has_contacts": has_contacts,
+                "no_contacts": no_contacts,
+                "country_short_code": "..",
+            }
+            if "only-valid" in x[2]:
+                params["only_valid"] = True
 
         if x[1]:
             params.update({"title": x[1]})
@@ -161,16 +157,9 @@ def genStaticFiles(results: list, us_domains_dict: dict, gb_domains_dict: dict):
             paths = x[2]
 
         for p in paths:
-            f = open(f"{dist}{p}", "w")
+            f = open(f"{dist}{p}", "w", encoding="utf-8")
             f.write(result)
             f.close()
-
-
-def splitRankedDomain(x: str) -> dict:
-    re_item = re.search("^(?P<num>.+?):(?P<val>.*)", x)
-    num = int(re_item.group("num"))
-    val = re_item.group("val")
-    return {"rank": num, "domain": val}
 
 
 if __name__ == "__main__":
@@ -179,40 +168,28 @@ if __name__ == "__main__":
 
     if lenArgs == 2:
         domain = sys.argv[1]
-        genSecurityTxtForDomain(domain, gen_sites)
+        genSecurityTxtForDomain((domain, {}), gen_sites)
     else:
-        results = []
-        us_domains_list = []
-        gb_domains_list = []
-
-        us_domains_dict = {}
-        gb_domains_dict = {}
+        domains_dict = {}
 
         if os.environ.get("GET_SEC_TXT", "false") == "true":
-            us_domains_list = ats.getSites(250, "US")
-            gb_domains_list = ats.getSites(250, "GB")
+            domains_dict = (
+                sites.top500
+            )  # {nn: sites.top500[nn] for nn in list(sites.top500)[:10]}
 
-            domain_list = set()
-
-            for x in us_domains_list:
-                srd = splitRankedDomain(x)
-                domain_list.add(srd["domain"])
-                us_domains_dict[srd["domain"]] = srd["rank"]
-
-            for x in gb_domains_list:
-                srd = splitRankedDomain(x)
-                domain_list.add(srd["domain"])
-                gb_domains_dict[srd["domain"]] = srd["rank"]
-
-            if len(domain_list) > 0:
+            if len(domains_dict) > 0:
                 print("Got domain lists, counts:")
-                print("Total -", len(domain_list))
-                print("US -", len(us_domains_dict))
-                print("GB -", len(gb_domains_dict))
+                print("Total -", len(domains_dict))
             else:
                 raise Exception("No domains")
 
-            with Pool(int(os.environ.get("POOL_SIZE", "15"))) as p:
-                results = p.map(genSecurityTxtForDomain, domain_list)
+            results_list = []
+            with Pool(int(os.environ.get("POOL_SIZE", os.cpu_count()))) as p:
+                results_list = p.map(genSecurityTxtForDomain, domains_dict.items())
 
-        genStaticFiles(results, us_domains_dict, gb_domains_dict)
+        results_dict = {}
+        for result in results_list:
+            key = list(result.keys())[0]
+            results_dict[key] = result[key]
+
+        genStaticFiles(results_dict)
