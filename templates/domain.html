@@ -4,7 +4,7 @@
   <h2>{{ res["target"] }}</h2>
   <p>Scanned: {{ updated_at }}</p>
 
-  <pre style="display:none;">{{ jpp(res) }}</pre>
+  <pre id="pre-debug">{{ jpp(res) }}</pre>
 
   {% if "scan_type" in res and res["scan_type"] == "domain" -%}
     <h3>dnssecuritytxt (DNS)</h3>

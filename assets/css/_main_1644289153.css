@@ -16,6 +16,10 @@ h3 {
   margin-top: 4rem;
 }
 
+#pre-debug {
+  display: none;
+}
+
 #navbarCollapse.show #navDomain {
     margin: 1em 0;
 }

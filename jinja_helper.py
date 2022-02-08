@@ -103,7 +103,7 @@ def renderTemplate(
     for x in [
         ["bs_min_css_hash", "assets/css/bootstrap.min.css"],
         ["bs_table_css_hash", "assets/css/bootstrap-table.min.css"],
-        ["main_css_hash", "assets/css/_main_1644083484.css"],
+        ["main_css_hash", "assets/css/_main_1644289153.css"],
         ["font_awesome_css_hash", "assets/css/all.min.css"],
         # ["jq_js_hash", "assets/js/jquery.min.js"],
         # ["bsb_js_hash", "assets/js/bootstrap.bundle.min.js"],
