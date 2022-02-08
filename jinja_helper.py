@@ -4,6 +4,7 @@ import os
 import html
 import re
 import time
+import json
 import subresource_integrity as integrity
 
 
@@ -25,6 +26,10 @@ def pb(boolIn: bool) -> str:
         return "Yes"
     else:
         return "No"
+
+
+def jpp(objIn) -> str:
+    return json.dumps(objIn, default=str, indent=2)
 
 
 def makeLink(v: str) -> str:
@@ -112,6 +117,7 @@ def renderTemplate(
 
     templateEnv.globals["colourFromLetter"] = colourFromLetter
     templateEnv.globals["pb"] = pb
+    templateEnv.globals["jpp"] = jpp
     templateEnv.globals["makeLink"] = makeLink
 
     template = templateEnv.get_template(filename)

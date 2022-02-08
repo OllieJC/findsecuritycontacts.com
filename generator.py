@@ -168,7 +168,7 @@ if __name__ == "__main__":
 
     if lenArgs == 2:
         domain = sys.argv[1]
-        genSecurityTxtForDomain((domain, {}), gen_sites)
+        genSecurityTxtForDomain((0, domain), gen_sites)
     else:
         domains_dict = {}
 
