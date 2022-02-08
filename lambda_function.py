@@ -1,5 +1,8 @@
 import generator
 import boto3
+import json
+import traceback
+
 from urllib.parse import urlparse
 
 
@@ -25,6 +28,15 @@ def lambda_handler(event, context):
                     ContentType="text/html",
                     CacheControl="public, max-age=60",
                 )
-            print(f"{event['domain']} - success.")
-        except Exception:
-            print(f"{event['domain']} - failed.")
+            print(json.dumps({"event": event, "target": domain, "outcome": "success"}))
+        except Exception as e:
+            print(
+                json.dumps(
+                    {
+                        "event": event,
+                        "target": domain,
+                        "outcome": "failed",
+                        "error": traceback.format_exc(),
+                    }
+                )
+            )

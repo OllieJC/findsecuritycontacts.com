@@ -11,8 +11,12 @@
     <p>You can find out more about <a href="https://dnssecuritytxt.org/" target="_blank">dnssecuritytxt here</a>.</p>
     {% if "dnssecuritytxt" in res and res["dnssecuritytxt"]["matching_domain"] -%}
       <p>Domain: {{ res["dnssecuritytxt"]["matching_domain"] }}</p>
-      <p>Contact: {{ makeLink(res["dnssecuritytxt"]["security_contact"])|safe }}</p>
-      <p>Policy: {{ makeLink(res["dnssecuritytxt"]["security_policy"])|safe }}</p>
+      {% if res["dnssecuritytxt"]["security_contact"] -%}
+        <p>Contact: {{ makeLink(res["dnssecuritytxt"]["security_contact"])|safe }}</p>
+      {% endif %}
+      {% if res["dnssecuritytxt"]["security_policy"] -%}
+        <p>Policy: {{ makeLink(res["dnssecuritytxt"]["security_policy"])|safe }}</p>
+      {% endif %}
     {% else %}
       <p>No DNS records found</p>
     {% endif %}

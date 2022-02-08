@@ -97,7 +97,7 @@ def add_dns_response(d, a=None, cname=None, txt=None):
 
 
 def targetparse(target: str) -> urllib.parse.ParseResult:
-    if target:
+    if target and type(target) == str:
         target = target.strip()
         if "://" not in target:
             target = f"null://{target}"
@@ -257,7 +257,9 @@ def parseResponse(headers: dict, body: str, url: str, status_code: int) -> dict:
             res["headers"][rh] = str(headers[rh])
 
     if has_contact:
-        res["full_text"] = html.escape(body.strip())
+        res["full_text"] = html.escape(
+            body.strip() if body and body is not None else ""
+        )
 
         actual_body = str(res["full_text"])
 
@@ -378,7 +380,7 @@ def getSecurityTxtFormat(
 
         if not res["has_contact"] and req.text:
             redirect_res = re.search(REDIRECT_REGEX, req.text)
-            if redirect_res is not None:
+            if redirect_res is not None and redirect_res.group("redirect") is not None:
                 possible_redirect = redirect_res.group("redirect").strip()
                 if possible_redirect:
                     if possible_redirect.startswith("/"):

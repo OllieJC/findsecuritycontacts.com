@@ -111,14 +111,15 @@ def get_certificate_info(bcert):
                             sdata = str(ce).split("\n")
                             data = []
                             for isd in sdata:
-                                isd = isd.strip()
-                                if isd and isd not in data:
-                                    if "URI" in isd:
-                                        k = isd.partition(":")[0]
-                                        v = isd.partition(":")[2]
-                                        data.append({k: v})
-                                    else:
-                                        data.append(isd)
+                                if isd:
+                                    isd = isd.strip()
+                                    if isd and isd not in data:
+                                        if "URI" in isd:
+                                            k = isd.partition(":")[0]
+                                            v = isd.partition(":")[2]
+                                            data.append({k: v})
+                                        else:
+                                            data.append(isd)
                         except Exception:
                             data = str(ce.get_data())
 

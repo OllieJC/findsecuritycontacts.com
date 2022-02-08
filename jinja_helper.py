@@ -33,27 +33,26 @@ def jpp(objIn) -> str:
 
 
 def makeLink(v: str) -> str:
-    v = v.strip().replace("<", "").replace(">", "")
-    v = html.escape(v)
-    v = v.replace("&amp;", "&")
-
-    res = v
-
     try:
+        if v and v is not None and type(v) == str:
+            v = v.strip().replace("<", "").replace(">", "")
+            v = html.escape(v)
+            v = v.replace("&amp;", "&")
+        else:
+            v = ""
+
         if v.startswith("mailto:"):
             v_re = re.search(r"^mailto:(?P<val>.+?)(?:\<|$)", v)
             actual = v_re.group("val")
-            res = f'<a href="mailto:{actual}">{actual}</a>'
+            v = f'<a href="mailto:{actual}">{actual}</a>'
 
         if v.startswith("https://"):
             v_re = re.search(r"^(?P<val>https:\/\/.+?)(?:\<|$)", v)
             actual = v_re.group("val")
-            res = f'<a href="{actual}">{actual}</a>'
-
+            v = f'<a href="{actual}">{actual}</a>'
     except Exception as e:
-        res += "<!-- weird error during makeLink... -->"
-
-    return res
+        v = "<!-- error during makeLink -->"
+    return v
 
 
 asset_sris: dict = {}
