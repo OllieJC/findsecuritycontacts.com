@@ -58,13 +58,8 @@ jobs:
           aws s3 cp dist/manifest.json s3://gotsecuritytxt.com --acl public-read --cache-control "public, max-age=60" --content-type "application/json"
           aws s3 cp dist/api/ s3://gotsecuritytxt.com/api/ --recursive --acl public-read --cache-control "public, max-age=3600" --content-type "application/json"
 
-          if [ "${{ github.event_name }}" != 'push' ]; then
-            aws s3 cp dist/top/ s3://gotsecuritytxt.com/top/ --recursive --acl public-read --cache-control "public, max-age=3600" --content-type "text/html"
-            aws s3 cp dist/index.html s3://gotsecuritytxt.com --acl public-read --cache-control "public, max-age=3600" --content-type "text/html"
-            aws s3 cp dist/us.html s3://gotsecuritytxt.com --acl public-read --cache-control "public, max-age=3600" --content-type "text/html"
-            aws s3 cp dist/gb.html s3://gotsecuritytxt.com --acl public-read --cache-control "public, max-age=3600" --content-type "text/html"
-            aws s3 cp dist/us s3://gotsecuritytxt.com --acl public-read --cache-control "public, max-age=3600" --content-type "text/html"
-            aws s3 cp dist/gb s3://gotsecuritytxt.com --acl public-read --cache-control "public, max-age=3600" --content-type "text/html"
-            aws s3 cp dist/us-only-valid s3://gotsecuritytxt.com --acl public-read --cache-control "public, max-age=3600" --content-type "text/html"
-            aws s3 cp dist/gb-only-valid s3://gotsecuritytxt.com --acl public-read --cache-control "public, max-age=3600" --content-type "text/html"
-          fi
+          # if [ "${{ github.event_name }}" != 'push' ]; then
+          aws s3 cp dist/top/ s3://gotsecuritytxt.com/top/ --recursive --acl public-read --cache-control "public, max-age=3600" --content-type "text/html"
+          aws s3 cp dist/index.html s3://gotsecuritytxt.com --acl public-read --cache-control "public, max-age=3600" --content-type "text/html"
+          aws s3 cp dist/only-valid s3://gotsecuritytxt.com --acl public-read --cache-control "public, max-age=3600" --content-type "text/html"
+          # fi
