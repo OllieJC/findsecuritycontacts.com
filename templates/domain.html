@@ -23,7 +23,7 @@
   {% endif %}
 
   <h3>security.txt (HTTP)</h3>
-  <p>You can find out more about <a href="https://securitytxt.org/" target="_blank">security.txt here</a>.</p>
+  <p>You can find out more about <a href="https://securitytxt.org/" target="_blank">security.txt here</a> or by looking up <a href="https://www.rfc-editor.org/rfc/rfc9116.html">RFC 9116</a>.</p>
 
   <p>{{ "Status: " + (res["http_security_txt"]["status_code"]|string) if "http_security_txt" in res and "status_code" in res["http_security_txt"] else "No security.txt file found" }}</p>
   {% if "http_security_txt" in res and "headers" in res["http_security_txt"] and "Content-Type" in res["http_security_txt"]["headers"] -%}
