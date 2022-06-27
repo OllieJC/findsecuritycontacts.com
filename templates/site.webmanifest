@@ -20,21 +20,14 @@
   "theme_color": "#7952b3",
   "shortcuts": [
     {
-      "name": "Check top sites in United States",
-      "short_name": "United States",
-      "description": "See if top sites in United States have a security.txt file or DNS security record",
+      "name": "Check top 500 sites",
+      "short_name": "Top 500 sites",
+      "description": "See if the top 500 sites have a security.txt file or DNS security record",
       "url": "/us",
       "icons": []
     },
     {
-      "name": "Check top sites in Great Britain",
-      "short_name": "Great Britain",
-      "description": "See if top sites in Great Britain have a security.txt file or DNS security record",
-      "url": "/gb",
-      "icons": []
-    },
-    {
-      "name": "Query a sit",
+      "name": "Query a site",
       "short_name": "Query",
       "description": "Query a site for its security.txt file or DNS security record",
       "url": "/query",
