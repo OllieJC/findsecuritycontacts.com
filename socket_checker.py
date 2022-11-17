@@ -49,10 +49,10 @@ def socket_check(
         except ssl.SSLError as e:
             port = p
             is_break = True
-            log(target, e, {"port": p, "error_type": "sslerror"})
+            log(target, error=e, obj={"port": p, "error_type": "sslerror"})
 
         except Exception as e:
-            log(target, e, {"port": p, "error_type": "socket"})
+            log(target, error=e, obj={"port": p, "error_type": "socket"})
 
         sock.close()
 
@@ -125,7 +125,7 @@ def get_certificate_info(bcert):
 
                     res.update({short_name: data})
     except Exception as e:
-        log(target, e, {"port": p, "error_type": "get_certificate_info"})
+        log(target, error=e, obj={"port": p, "error_type": "get_certificate_info"})
     return res
 
 

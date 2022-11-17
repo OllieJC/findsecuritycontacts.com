@@ -17,7 +17,7 @@ jobs:
 
       - uses: actions/setup-python@v2
         with:
-          python-version: '3.8'
+          python-version: '3.9'
           architecture: 'x64'
 
       - name: Configure AWS credentials
@@ -34,10 +34,15 @@ jobs:
           export GET_SEC_TXT=$GET_SEC_TXT
           # fi
 
-          ATS_KEY="${{ secrets.ATS_KEY }}"
-          export ATS_KEY=$ATS_KEY
-
           python -m pip install -r requirements.txt
+        	python -m pip install \
+            --platform manylinux2010_x86_64 \
+            --implementation cp \
+            --python 3.9 \
+            --only-binary=:all: --upgrade \
+            --target .target/ \
+            cryptography pyopenssl
+
           python generator.py
 
       - name: Copy files using the AWS CLI

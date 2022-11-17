@@ -11,6 +11,8 @@ import urllib
 import backoff
 import re
 import html
+import httpx
+import ssl
 
 from urllib3.util import connection
 
@@ -170,7 +172,7 @@ def get_address_tuple(source_address):
                     dns_val = dns_val_raw.to_text()
                     add_dns_response(host, a=dns_val)
             except Exception as e:
-                log(host, e)
+                log(host, error=e)
 
             try:
                 dns_result = resolver.resolve(host, "CNAME")
@@ -178,7 +180,7 @@ def get_address_tuple(source_address):
                     dns_val = dns_val_raw.to_text()
                     add_dns_response(host, cname=dns_val)
             except Exception as e:
-                log(host, e)
+                log(host, error=e)
 
             try:
                 dns_result = resolver.resolve(host, "TXT")
@@ -186,7 +188,7 @@ def get_address_tuple(source_address):
                     dns_val = dns_val_raw.to_text()
                     add_dns_response(host, txt=dns_val)
             except Exception as e:
-                log(host, e)
+                log(host, error=e)
 
         if host in dns_responses and "a_records" in dns_responses[host]:
             if len(dns_responses[host]["a_records"]) > 0:
@@ -213,6 +215,8 @@ def get_http_security_txt(hostname: str, port: int = None) -> dict:
         "http_root": "http://{0}/security.txt",
     }
 
+    res = {}
+
     for x in url_formats:
         log(hostname, f"get_http_security_txt: trying: {x}: {url_formats[x]}")
         res = getSecurityTxtFormat(hostname, port, url_formats[x])
@@ -223,7 +227,9 @@ def get_http_security_txt(hostname: str, port: int = None) -> dict:
     return {}
 
 
-def parseResponse(headers: dict, body: str, url: str, status_code: int) -> dict:
+def parseResponse(
+    headers: dict, body: str, url: str, status_code: int, http_version: str = None
+) -> dict:
     has_contact = re.search("(?mi)^contact:", body) is not None
 
     res = {
@@ -248,6 +254,7 @@ def parseResponse(headers: dict, body: str, url: str, status_code: int) -> dict:
             "Policy": [],
         },
         "headers": {},
+        "http_version": http_version,
     }
 
     for rh in headers:
@@ -312,16 +319,31 @@ def getRedirectsFromReq(req, is_html_redirect: bool = False) -> dict:
     res = []
     counter = 0
 
+    main_url = str(req.url)
+    main_hv = req.http_version if "http_version" in dir(req) else "HTTP/1.X"
+
     for r in req.history:
+        url = str(r.url)
         counter += 1
         rtype = "HTML" if counter == 1 and is_html_redirect else str(r.status_code)
+        hv = r.http_version if "http_version" in dir(r) else "HTTP/1.X"
         res.append(
-            {"type": rtype, "val": r.url, "https": (r.url.startswith("https://"))}
+            {
+                "type": rtype,
+                "val": url,
+                "https": (url.startswith("https://")),
+                "http_version": hv,
+            }
         )
 
     rtype = "HTML" if counter == 0 and is_html_redirect else str(req.status_code)
     res.append(
-        {"type": rtype, "val": req.url, "https": (req.url.startswith("https://"))}
+        {
+            "type": rtype,
+            "val": main_url,
+            "https": (main_url.startswith("https://")),
+            "http_version": main_hv,
+        }
     )
     return res
 
@@ -337,7 +359,7 @@ def onlyHTTPSInRedirects(redirects):
 
 @backoff.on_exception(
     backoff.expo,
-    requests.exceptions.RequestException,
+    Exception,
     max_time=(HTTP_RETRIES * HTTP_TIMEOUT) + 1,
     max_tries=HTTP_RETRIES,
     giveup=lambda e: e.response is not None and e.response.status_code < 500,
@@ -365,18 +387,51 @@ def getSecurityTxtFormat(
         headers = {"User-Agent": HTTP_USER_AGENT}
 
         req = None
+        http1fb = False
+
         try:
-            req = requests.get(url, headers=headers, verify=True, timeout=HTTP_TIMEOUT)
-        except requests.exceptions.SSLError as e:
-            res["https_failure"] = str(e)
-            req = requests.get(url, headers=headers, verify=False, timeout=HTTP_TIMEOUT)
+            context = ssl.SSLContext(ssl.PROTOCOL_TLS)
+            context.check_hostname = False
+            context.verify_mode = ssl.CERT_NONE
+            context.load_default_certs()
+            client = httpx.Client(
+                http2=True,
+                verify=context,
+                follow_redirects=True,
+            )
+            req = client.get(url, headers=headers, timeout=HTTP_TIMEOUT)
         except Exception as e:
-            raise e
+            log(hostname, message="httpx non-verify error", error=e)
+            res["httpx_error"] = str(e)
+            http1fb = True
+
+        if http1fb:
+            try:
+                req = requests.get(
+                    url, headers=headers, verify=True, timeout=HTTP_TIMEOUT
+                )
+            except requests.exceptions.SSLError as e:
+                log(hostname, message="requests verify error", error=e)
+                res["requests_https_failure"] = str(e)
+                req = requests.get(
+                    url, headers=headers, verify=False, timeout=HTTP_TIMEOUT
+                )
+            except Exception as e:
+                log(hostname, message="requests error", error=e)
+                res["requests_error"] = str(e)
 
         if req is None:
-            return {}
+            return res
 
-        res = parseResponse(req.headers, req.text, req.url, req.status_code)
+        res.update(
+            parseResponse(
+                req.headers,
+                req.text,
+                str(req.url),
+                req.status_code,
+                req.http_version if "http_version" in dir(req) else "HTTP/1.X",
+            )
+        )
 
         if not res["has_contact"] and req.text:
             redirect_res = re.search(REDIRECT_REGEX, req.text)
@@ -395,7 +450,7 @@ def getSecurityTxtFormat(
         res["redirects"] = getRedirectsFromReq(req, html_redirect)
         res["valid_https"] = onlyHTTPSInRedirects(res["redirects"])
     except Exception as e:
-        log(hostname, e)
+        log(hostname, error=e)
 
     return res
 

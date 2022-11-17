@@ -20,7 +20,14 @@ build-lambda:
 build-lambda-full: build-dependencies build-lambda
 
 build-dependencies:
-	python3.8 -m pip install -r requirements.txt -t .target/ --upgrade
+	python3.9 -m pip install -r requirements.txt -t .target/ --upgrade
+	python3.9 -m pip install \
+    --platform manylinux2010_x86_64 \
+    --implementation cp \
+    --python 3.9 \
+    --only-binary=:all: --upgrade \
+    --target .target/ \
+    cryptography pyopenssl
 
 clean:
 	rm -rf .build || echo ".build doesn't exist"

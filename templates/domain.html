@@ -47,7 +47,7 @@
   {% endif -%}
 
   {% if "http_security_txt" in res and "has_contact" in res["http_security_txt"] -%}
-    <p>URL: {{ makeLink(res["http_security_txt"]["url"])|safe }}</p>
+    <p>URL: {{ makeLink(res["http_security_txt"]["url"])|safe }} ({{ res["http_security_txt"]["http_version"] }})</p>
     <p>
       Has a contact: {{ pb(res["http_security_txt"]["has_contact"]) }}
     {% if res["http_security_txt"]["has_contact"] -%}
@@ -89,7 +89,7 @@
           <p>Redirects:</p>
           <ul>
           {% for x in res["http_security_txt"]["redirects"] %}
-            <li>{{ x["type"] }}: {{ x["val"] }}</li>
+            <li>{{ x["type"] }}: {{ x["val"] }} ({{ x["http_version"] }})</li>
           {% endfor %}
           </ul>
         </div>
