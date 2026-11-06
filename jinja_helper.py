@@ -7,6 +7,8 @@ import time
 import json
 import subresource_integrity as integrity
 
+from json_logger import log
+
 
 def colourFromLetter(letter: str = "") -> str:
     if not letter:
@@ -94,7 +96,9 @@ def renderTemplate(
         params.update({"title": params["dest_domain"]})
     else:
         description = ""
-        print(f"Skipping canonical and description for: {filename}")
+        log(
+            target="INFO", message=f"Skipping canonical and description for: {filename}"
+        )
 
     params.update({"description": description})
     params.update({"canonical": canonical})
